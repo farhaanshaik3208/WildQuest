@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WildQuest</title>
+    <style>
+      :root {
+        --bg: #f4f8ef;
+        --panel: #ffffff;
+        --primary: #2d6a4f;
+        --primary-dark: #1b4332;
+        --accent: #d9f99d;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --border: #dfe9d7;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(180deg, #edf7e8 0%, #f9fbf5 100%);
+        color: var(--text);
+      }
+
+      .page {
+        max-width: 1100px;
+        margin: 32px auto;
+        padding: 24px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 4vw, 3rem);
+        color: var(--primary-dark);
+      }
+
+      .search-wrap {
+        display: flex;
+        align-items: center;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 12px 16px;
+        box-shadow: 0 8px 18px rgba(19, 47, 32, 0.06);
+      }
+
+      .search-wrap input {
+        border: none;
+        outline: none;
+        background: transparent;
+        width: 100%;
+        font-size: 1rem;
+        color: var(--text);
+      }
+
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .filter {
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--text);
+        border-radius: 999px;
+        padding: 10px 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+
+      .filter.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .results-header {
+        margin: 18px 0 12px;
+        font-size: 1.1rem;
+        color: var(--muted);
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+
+      #animalList {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+      }
+
+      .animal-card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        box-shadow: 0 8px 18px rgba(19, 47, 32, 0.04);
+      }
+
+      .animal-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(19, 47, 32, 0.08);
+      }
+
+      .animal-image {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        background: var(--accent);
+        display: grid;
+        place-items: center;
+        font-size: 2.3rem;
+      }
+
+      .animal-info {
+        flex: 1;
+      }
+
+      .animal-name {
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin-bottom: 4px;
+      }
+
+      .scientific {
+        color: var(--muted);
+        font-size: 0.86rem;
+        font-style: italic;
+        margin-bottom: 6px;
+      }
+
+      .animal-tags {
+        color: var(--primary-dark);
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+
+      .arrow {
+        font-size: 2rem;
+        color: var(--primary);
+      }
+
+      .empty {
+        text-align: center;
+        background: var(--panel);
+        border: 1px dashed var(--border);
+        border-radius: 20px;
+        padding: 40px 20px;
+        color: var(--muted);
+      }
+
+      .animal-detail {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 18px 36px rgba(31, 41, 55, 0.08);
+        position: sticky;
+        top: 20px;
+      }
+
+      .detail-icon {
+        font-size: 5rem;
+        margin-bottom: 12px;
+      }
+
+      .detail-name {
+        margin: 0 0 8px;
+      }
+
+      .detail-meta {
+        color: var(--muted);
+        font-style: italic;
+        margin-bottom: 18px;
+      }
+
+      .tag {
+        display: inline-block;
+        background: var(--accent);
+        color: var(--primary-dark);
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-weight: 700;
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
+
+      .back-btn {
+        margin-top: 20px;
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      @media (max-width: 860px) {
+        .content {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .page { padding: 16px; }
+        .topbar { flex-direction: column; align-items: flex-start; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="topbar">
+        <h1>WildQuest</h1>
+      </div>
+
+      <div class="search-wrap">
+        <input id="searchInput" type="text" placeholder="Search animals, habitats, or categories..." />
+      </div>
+
+      <div class="filters">
+        <button class="filter active" data-category="All">All</button>
+        <button class="filter" data-category="Mammal">Mammal</button>
+        <button class="filter" data-category="Bird">Bird</button>
+        <button class="filter" data-category="Fish">Fish</button>
+        <button class="filter" data-category="Reptile">Reptile</button>
+      </div>
+
+      <div id="resultsTitle" class="results-header">0 animals found</div>
+
+      <div class="content">
+        <div id="animalList"></div>
+        <div id="animalDetail" class="animal-detail"></div>
+      </div>
+    </div>
+
+    <script>
+      const animals = [
+        { id: "elephant", name: "African Elephant", scientificName: "Loxodonta africana", category: "Mammal", habitat: "Grassland", icon: "🐘", conservation: "Endangered" },
+        { id: "eagle", name: "Bald Eagle", scientificName: "Haliaeetus leucocephalus", category: "Bird", habitat: "Forest", icon: "🦅", conservation: "Least Concern" },
+        { id: "blue-whale", name: "Blue Whale", scientificName: "Balaenoptera musculus", category: "Mammal", habitat: "Ocean", icon: "🐋", conservation: "Endangered" },
+        { id: "cheetah", name: "Cheetah", scientificName: "Acinonyx jubatus", category: "Mammal", habitat: "Grassland", icon: "🐆", conservation: "Vulnerable" },
+        { id: "dolphin", name: "Dolphin", scientificName: "Tursiops truncatus", category: "Mammal", habitat: "Ocean", icon: "🐬", conservation: "Least Concern" },
+        { id: "giraffe", name: "Giraffe", scientificName: "Giraffa camelopardalis", category: "Mammal", habitat: "Grassland", icon: "🦒", conservation: "Vulnerable" },
+        { id: "lion", name: "Lion", scientificName: "Panthera leo", category: "Mammal", habitat: "Grassland", icon: "🦁", conservation: "Vulnerable" },
+        { id: "tiger", name: "Tiger", scientificName: "Panthera tigris", category: "Mammal", habitat: "Forest", icon: "🐅", conservation: "Endangered" },
+        { id: "sea-turtle", name: "Sea Turtle", scientificName: "Chelonioidea", category: "Reptile", habitat: "Ocean", icon: "🐢", conservation: "Endangered" },
+        { id: "great-white-shark", name: "Great White Shark", scientificName: "Carcharodon carcharias", category: "Fish", habitat: "Ocean", icon: "🦈", conservation: "Vulnerable" },
+        { id: "penguin", name: "Emperor Penguin", scientificName: "Aptenodytes forsteri", category: "Bird", habitat: "Arctic", icon: "🐧", conservation: "Near Threatened" },
+        { id: "polar-bear", name: "Polar Bear", scientificName: "Ursus maritimus", category: "Mammal", habitat: "Arctic", icon: "🐻‍❄️", conservation: "Vulnerable" }
+      ];
+
+      const searchInput = document.getElementById("searchInput");
+      const animalList = document.getElementById("animalList");
+      const resultsTitle = document.getElementById("resultsTitle");
+      const animalDetail = document.getElementById("animalDetail");
+      const filterButtons = document.querySelectorAll(".filter");
+
+      let selectedCategory = "All";
+
+      function getFilteredAnimals() {
+        const searchText = searchInput.value.toLowerCase().trim();
+
+        return animals.filter((animal) => {
+          const matchesSearch =
+            animal.name.toLowerCase().includes(searchText) ||
+            animal.scientificName.toLowerCase().includes(searchText) ||
+            animal.habitat.toLowerCase().includes(searchText) ||
+            animal.category.toLowerCase().includes(searchText);
+
+          const matchesCategory =
+            selectedCategory === "All" || animal.category === selectedCategory;
+
+          return matchesSearch && matchesCategory;
+        });
+      }
+
+      function showAnimal(animalId) {
+        const animal = animals.find((entry) => entry.id === animalId);
+
+        if (!animal) {
+          animalDetail.innerHTML = "<h2>Animal not found</h2><p>Please choose another animal.</p>";
+          return;
+        }
+
+        animalDetail.innerHTML = `
+          <div class="detail-icon">${animal.icon}</div>
+          <h2 class="detail-name">${animal.name}</h2>
+          <div class="detail-meta">${animal.scientificName}</div>
+          <div>
+            <span class="tag">${animal.category}</span>
+            <span class="tag">${animal.habitat}</span>
+            <span class="tag">${animal.conservation}</span>
+          </div>
+          <button class="back-btn" type="button">Back to list</button>
+        `;
+
+        const backButton = animalDetail.querySelector(".back-btn");
+        backButton.addEventListener("click", () => {
+          animalDetail.innerHTML = "";
+        });
+      }
+
+      function renderAnimals() {
+        const filteredAnimals = getFilteredAnimals();
+
+        animalList.innerHTML = "";
+        resultsTitle.textContent = `${filteredAnimals.length} animal${filteredAnimals.length === 1 ? "" : "s"} found`;
+
+        if (filteredAnimals.length === 0) {
+          animalList.innerHTML = `
+            <div class="empty">
+              <div style="font-size:45px;">🔎</div>
+              <h3>No animals found</h3>
+              <p>Try another animal name, habitat or category.</p>
+            </div>
+          `;
+          return;
+        }
+
+        filteredAnimals.forEach((animal) => {
+          const card = document.createElement("div");
+          card.className = "animal-card";
+          card.innerHTML = `
+            <div class="animal-image">${animal.icon}</div>
+            <div class="animal-info">
+              <div class="animal-name">${animal.name}</div>
+              <div class="scientific">${animal.scientificName}</div>
+              <div class="animal-tags">${animal.category} • ${animal.habitat}</div>
+            </div>
+            <div class="arrow">›</div>
+          `;
+
+          card.addEventListener("click", () => {
+            showAnimal(animal.id);
+          });
+
+          animalList.appendChild(card);
+        });
+      }
+
+      searchInput.addEventListener("input", () => {
+        renderAnimals();
+      });
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          filterButtons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+          selectedCategory = button.dataset.category;
+          renderAnimals();
+        });
+      });
+
+      renderAnimals();
+    </script>
+  </body>
+</html>

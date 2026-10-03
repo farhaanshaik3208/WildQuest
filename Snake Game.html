@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+<body>
+
+<audio id="endMp3" src="https://maxw.com/low.mp3"></audio>
+<audio id="turnMp3" src="https://maxw.com/low.mp3"></audio>
+
+<div style="background-color:pink; height:480px; width:640px;">
+  <canvas id="gameCanvas" width="640" height="480"></canvas>
+</div>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let snake = [{x: 300, y: 220}];   // snake body segments
+let dir = "RIGHT";
+let food = null;
+let score = 0;
+let time = 0;
+
+let gameStarted = false;
+let countdownStarted = false;
+
+// Draw purple border
+function drawBackground() {
+  ctx.clearRect(0, 0, 640, 480);
+  ctx.strokeStyle = "purple";
+  ctx.lineWidth = 40;
+  ctx.strokeRect(0, 0, 640, 480);
+}
+
+// Start screen
+function drawStartScreen() {
+  drawBackground();
+  ctx.fillStyle = "white";
+  ctx.font = "70px Arial";
+  ctx.fillText("START", 220, 250);
+
+  ctx.font = "20px Arial";
+  ctx.fillText("Press ANY KEY to begin", 230, 300);
+}
+
+drawStartScreen();
+
+// Countdown
+function startCountdown() {
+  countdownStarted = true;
+  let count = 3;
+
+  const countdownTimer = setInterval(() => {
+    drawBackground();
+    ctx.fillStyle = "white";
+    ctx.font = "100px Arial";
+
+    if (count > 0) ctx.fillText(count, 300, 260);
+    else ctx.fillText("GO!", 240, 260);
+
+    count--;
+
+    if (count < -1) {
+      clearInterval(countdownTimer);
+      drawBackground();
+      gameStarted = true;
+      startGame();
+    }
+  }, 1000);
+}
+
+// Spawn food
+function spawnFood() {
+  food = {
+    x: Math.floor(Math.random() * 60) * 10 + 40,
+    y: Math.floor(Math.random() * 40) * 10 + 40
+  };
+}
+
+// Game loop
+function startGame() {
+  spawnFood();
+  setInterval(() => time++, 1000);
+
+  const gameTimer = setInterval(() => {
+    if (!gameStarted) return;
+
+    drawBackground();
+
+    // Move snake
+    let head = {...snake[0]};
+
+    if (dir === "RIGHT") head.x += 10;
+    if (dir === "LEFT") head.x -= 10;
+    if (dir === "UP") head.y -= 10;
+    if (dir === "DOWN") head.y += 10;
+
+    snake.unshift(head);
+
+    // Check food collision
+    if (head.x === food.x && head.y === food.y) {
+      score++;
+      spawnFood();
+    } else {
+      snake.pop(); // remove tail unless eating
+    }
+
+    // Draw food
+    ctx.fillStyle = "orange";
+    ctx.fillRect(food.x, food.y, 10, 10);
+
+    // Draw snake
+    ctx.fillStyle = "white";
+    snake.forEach(seg => {
+      ctx.fillRect(seg.x, seg.y, 10, 10);
+    });
+
+    // Score + timer
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, 200, 40);
+
+    ctx.fillStyle = "black";
+    ctx.font = "20px Arial";
+    ctx.fillText("Score: " + score, 10, 22);
+    ctx.fillText("Time: " + time + "s", 100, 22);
+
+    // Wall collision
+    if (head.x < 40 || head.x > 600 || head.y < 40 || head.y > 440) {
+      endGame(gameTimer);
+    }
+
+    // Self collision
+    for (let i = 1; i < snake.length; i++) {
+      if (snake[i].x === head.x && snake[i].y === head.y) {
+        endGame(gameTimer);
+      }
+    }
+
+  }, 100);
+}
+
+// End game
+function endGame(timer) {
+  clearInterval(timer);
+  endMp3.play();
+  ctx.font = "80px Arial";
+  ctx.fillText("Game Over!", 100, 250);
+  gameStarted = false;
+}
+
+// Key controls
+document.onkeydown = function (e) {
+  const k = e.keyCode;
+
+  if (!gameStarted && !countdownStarted ) {
+    startCountdown();
+    return;
+  }
+
+  if (!gameStarted) return;
+
+  if (k === 38 && dir !== "DOWN") dir = "UP";
+  if (k === 39 && dir !== "LEFT") dir = "RIGHT";
+  if (k === 40 && dir !== "UP") dir = "DOWN";
+  if (k === 37 && dir !== "RIGHT") dir = "LEFT";
+
+  turnMp3.currentTime = 0;
+  turnMp3.play();
+};
+</script>
+
+</body>
+</html>

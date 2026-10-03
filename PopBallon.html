@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<body>
+
+<h1 id="scoreBox">score: 0</h1>
+
+<!-- Guaranteed working pop sound -->
+<audio id="popSound">
+  <source src="https://www.fesliyanstudios.com/play-mp3/387" type="audio/mpeg">
+</audio>
+
+<div id="lollipop"></div>
+
+<style>
+  body {
+    background: #f0f8ff;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  #lollipop {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: pink;
+    border-radius: 60px 60px 60px 60px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  #lollipop::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 3px;
+    height: 40px;
+    background: #555;
+    transform: translateX(-50%);
+  }
+</style>
+
+<script>
+  const lollipop = document.getElementById('lollipop');
+  const scoreBox = document.getElementById('scoreBox');
+  const popSound = document.getElementById('popSound');
+
+  let score = 0;
+  let count = 0;
+
+  lollipop.onclick = () => {
+    score++;
+    scoreBox.innerHTML = "score: " + score;
+
+    popSound.currentTime = 0;
+    popSound.play();
+
+    lollipop.style.transform = "scale(0.1)";
+  };
+
+  function moveIt() {
+    lollipop.style.transform = "scale(1)";
+    lollipop.style.left = Math.random() * (window.innerWidth - 100) + "px";
+    lollipop.style.top = Math.random() * (window.innerHeight - 160) + "px";
+
+    count++;
+    if (count === 20) {
+      alert("Game over!");
+      clearInterval(timer);
+    }
+  }
+
+  const timer = setInterval(moveIt, 1000);
+</script>
+
+</body>
+</html>
+
