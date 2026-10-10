@@ -1,0 +1,3924 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WildQuest</title>
+    <style>
+      :root {
+        --bg: #f4f7ee;
+        --panel: #ffffff;
+        --primary: #267b48;
+        --primary-dark: #173f2c;
+        --accent: #a9e85c;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --border: #dfe9d7;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      body {
+        min-height: 100vh;
+      }
+
+      .page {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 30px 24px 48px;
+      }
+
+      .splash-screen {
+        position: relative;
+        display: flex;
+        min-height: 100vh;
+        min-height: 100svh;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        overflow: hidden;
+        padding: clamp(30px, 7vh, 72px) 24px 34px;
+        isolation: isolate;
+        color: #fff;
+        text-align: center;
+        background:
+          radial-gradient(ellipse at 50% 50%, rgba(235, 245, 214, .12), transparent 42%),
+          linear-gradient(180deg, #123b32 0%, #1c563f 46%, #85a95a 100%);
+      }
+
+      .splash-screen::before, .splash-screen::after {
+        position: absolute;
+        z-index: -1;
+        right: -12%;
+        bottom: -16%;
+        left: -12%;
+        height: 42%;
+        border-radius: 50% 50% 0 0 / 22% 22% 0 0;
+        content: "";
+      }
+
+      .splash-screen::before {
+        bottom: -21%;
+        background: linear-gradient(180deg, #77984f, #345f3b);
+        transform: rotate(-4deg);
+      }
+
+      .splash-screen::after {
+        right: -20%;
+        left: -20%;
+        height: 33%;
+        background: linear-gradient(180deg, #aac36d, #658947);
+        transform: rotate(3deg);
+      }
+
+      .splash-brand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .splash-paw {
+        width: clamp(54px, 10vw, 82px);
+        height: clamp(54px, 10vw, 82px);
+        margin-bottom: 12px;
+      }
+
+      .splash-paw svg {
+        width: 100%;
+        fill: var(--accent);
+      }
+
+      .splash-title {
+        margin: 0;
+        color: #fff;
+        font-size: clamp(3rem, 11vw, 6rem);
+        line-height: 0.95;
+        letter-spacing: -0.07em;
+        font-weight: 900;
+      }
+
+      .splash-title span {
+        color: var(--accent);
+      }
+
+      .splash-tagline {
+        margin: 10px 0 0;
+        color: #e0eee3;
+        font-size: clamp(1rem, 3.5vw, 1.4rem);
+        letter-spacing: 0.04em;
+      }
+
+      .splash-scene {
+        position: relative;
+        display: flex;
+        width: min(100%, 620px);
+        min-height: clamp(180px, 34vh, 310px);
+        align-items: end;
+        justify-content: center;
+        gap: clamp(6px, 4vw, 32px);
+        padding-bottom: 12px;
+      }
+
+      .splash-sun {
+        position: absolute;
+        top: 5%;
+        left: 18%;
+        width: clamp(42px, 8vw, 70px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #f4d987;
+        box-shadow: 0 0 48px rgba(244, 217, 135, .3);
+      }
+
+      .splash-animal {
+        position: relative;
+        z-index: 1;
+        font-size: clamp(4rem, 15vw, 9rem);
+        line-height: 1;
+        filter: drop-shadow(0 12px 9px rgba(20, 48, 31, .26));
+      }
+
+      .splash-animal:nth-of-type(2) {
+        transform: translateY(-22px) scale(.78);
+      }
+
+      .splash-animal:nth-of-type(3) {
+        font-size: clamp(5rem, 19vw, 11rem);
+      }
+
+      .splash-animal:nth-of-type(4) {
+        transform: translateY(-16px) scale(.82);
+      }
+
+      .splash-copy {
+        max-width: 430px;
+        margin: 0 0 20px;
+        color: #f0f5e8;
+        font-size: 1rem;
+        line-height: 1.55;
+      }
+
+      .get-started-btn {
+        display: inline-flex;
+        min-width: 220px;
+        min-height: 54px;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--accent);
+        color: #173f2c;
+        font: inherit;
+        font-size: 1.08rem;
+        font-weight: 800;
+        box-shadow: 0 10px 26px rgba(12, 37, 25, .25);
+        cursor: pointer;
+        transition: transform .15s ease, box-shadow .15s ease;
+      }
+
+      .get-started-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(12, 37, 25, .32);
+      }
+
+      .get-started-btn:focus-visible {
+        outline: 3px solid #fff;
+        outline-offset: 4px;
+      }
+
+      .splash-footer {
+        margin: 18px 0 0;
+        color: rgba(255,255,255,.8);
+        font-size: .85rem;
+      }
+
+      h1 {
+        margin: 0 0 28px;
+        font-size: clamp(3.3rem, 6vw, 6rem);
+        line-height: 0.9;
+        letter-spacing: -0.07em;
+        color: var(--primary-dark);
+        font-weight: 900;
+      }
+
+      .home-page {
+        padding-top: 24px;
+      }
+
+      .hero-banner {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1.25fr 0.75fr;
+        gap: 24px;
+        align-items: center;
+        min-height: 300px;
+        overflow: hidden;
+        padding: clamp(24px, 5vw, 52px);
+        border-radius: 30px;
+        color: #fff;
+        background:
+          radial-gradient(ellipse at 88% 110%, rgba(114, 177, 72, .9) 0 14%, transparent 14.5%),
+          radial-gradient(ellipse at 72% 115%, rgba(55, 126, 67, .85) 0 25%, transparent 25.5%),
+          linear-gradient(120deg, rgba(9, 39, 34, .97), rgba(18, 74, 49, .87) 55%, rgba(42, 101, 57, .7)),
+          #16442f;
+        box-shadow: 0 18px 42px rgba(19, 57, 36, 0.2);
+      }
+
+      .hero-copy {
+        position: relative;
+        z-index: 1;
+      }
+
+      .brand-lockup {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+
+      .brand-paw {
+        display: grid;
+        width: 54px;
+        height: 54px;
+        flex: 0 0 54px;
+        place-items: center;
+      }
+
+      .brand-paw svg {
+        width: 100%;
+        fill: var(--accent);
+      }
+
+      .brand-name {
+        margin: 0;
+        color: #fff;
+        font-size: clamp(2.2rem, 4vw, 3.5rem);
+        font-weight: 900;
+        letter-spacing: -0.06em;
+      }
+
+      .brand-name span {
+        color: var(--accent);
+      }
+
+      .brand-tagline {
+        margin: 0;
+        color: #d7e9df;
+        font-size: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .hero-banner h2 {
+        max-width: 600px;
+        margin: 0 0 12px;
+        font-size: clamp(1.8rem, 3.3vw, 3rem);
+        line-height: 1.08;
+      }
+
+      .hero-banner p {
+        max-width: 500px;
+        margin: 0;
+        color: #e1eee6;
+        font-size: 1.02rem;
+        line-height: 1.55;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 22px;
+      }
+
+      .hero-action {
+        border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 999px;
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        padding: 9px 13px;
+        font-size: 0.85rem;
+        font-weight: 700;
+      }
+
+      .hero-action:first-child {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: #153b28;
+      }
+
+      .hero-art {
+        position: relative;
+        display: grid;
+        min-height: 215px;
+        place-items: center;
+        font-size: clamp(8rem, 19vw, 14rem);
+        filter: drop-shadow(0 14px 14px rgba(0,0,0,.27));
+      }
+
+      .hero-art::before, .hero-art::after {
+        position: absolute;
+        z-index: -1;
+        content: "";
+        border-radius: 50%;
+        background: rgba(194, 233, 151, .16);
+      }
+
+      .hero-art::before {
+        width: 210px;
+        height: 210px;
+      }
+
+      .hero-art::after {
+        width: 270px;
+        height: 100px;
+        bottom: 0;
+        background: rgba(162, 211, 111, .17);
+      }
+
+      .feature-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 34px 0 18px;
+      }
+
+      .feature-heading h2 {
+        margin: 0;
+        color: var(--primary-dark);
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+      }
+
+      .feature-heading p {
+        margin: 0;
+        color: #69756d;
+      }
+
+      .search-wrap {
+        display: flex;
+        align-items: center;
+        background: rgba(255,255,255,0.45);
+        border: 1px solid rgba(31, 41, 55, 0.08);
+        border-radius: 28px;
+        min-height: 72px;
+        padding: 12px 22px;
+        width: 100%;
+      }
+
+      .search-wrap input {
+        border: none;
+        outline: none;
+        background: transparent;
+        width: 100%;
+        font-size: 1.05rem;
+        color: var(--text);
+      }
+
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 26px 0 18px;
+      }
+
+      .filter {
+        border: 1px solid rgba(31, 41, 55, 0.08);
+        background: rgba(255,255,255,0.38);
+        color: var(--primary-dark);
+        border-radius: 999px;
+        padding: 12px 18px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+
+      .filter.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .results-header {
+        margin: 10px 0 20px;
+        font-size: 1.15rem;
+        color: var(--primary-dark);
+        font-weight: 700;
+      }
+
+      .animal-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .animal-card {
+        background: rgba(255,255,255,0.4);
+        border: 1px solid rgba(31, 41, 55, 0.08);
+        border-radius: 18px;
+        min-height: 170px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 18px 20px;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .animal-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 22px rgba(19, 47, 32, 0.08);
+      }
+
+      .animal-image {
+        width: 72px;
+        height: 72px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #dff3c9, #bfe4a5);
+        border: 2px solid rgba(38, 123, 72, 0.18);
+        display: grid;
+        place-items: center;
+        font-size: 2.5rem;
+        flex-shrink: 0;
+        box-shadow: inset 0 2px 8px rgba(255,255,255,0.35), 0 8px 18px rgba(38,123,72,0.12);
+      }
+
+      .animal-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .animal-name {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--primary-dark);
+        margin-bottom: 4px;
+      }
+
+      .scientific {
+        color: #5d675f;
+        font-size: 0.9rem;
+        font-style: italic;
+        margin-bottom: 7px;
+      }
+
+      .animal-tags {
+        color: var(--primary-dark);
+        font-size: 0.92rem;
+        font-weight: 700;
+        line-height: 1.4;
+      }
+
+      .arrow {
+        margin-left: auto;
+        font-size: 2.2rem;
+        color: rgba(45, 106, 79, 0.85);
+        font-weight: 700;
+      }
+
+      .empty {
+        background: rgba(255,255,255,0.3);
+        border: 1px dashed rgba(31, 41, 55, 0.12);
+        border-radius: 18px;
+        padding: 40px 20px;
+        text-align: center;
+        color: var(--primary-dark);
+        grid-column: 1 / -1;
+      }
+
+      .empty-icon {
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .detail-page {
+        display: block;
+      }
+
+      .detail-panel {
+        background: rgba(255,255,255,0.4);
+        border: 1px solid rgba(31, 41, 55, 0.08);
+        border-radius: 28px;
+        padding: 28px;
+        max-width: 820px;
+        margin: 0 auto;
+      }
+
+      .detail-top {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .detail-icon {
+        width: 104px;
+        height: 104px;
+        border-radius: 26px;
+        background: linear-gradient(135deg, #ebf8d3, #cfeaa5);
+        border: 2px solid rgba(38, 123, 72, 0.18);
+        display: grid;
+        place-items: center;
+        font-size: 4rem;
+        box-shadow: inset 0 2px 8px rgba(255,255,255,0.35), 0 10px 22px rgba(38,123,72,0.12);
+      }
+
+      .detail-top h2 {
+        margin: 0;
+        font-size: clamp(2rem, 3vw, 3rem);
+        color: var(--primary-dark);
+      }
+
+      .detail-meta {
+        margin-top: 6px;
+        color: #59685f;
+        font-size: 1rem;
+        font-style: italic;
+      }
+
+      .detail-tags {
+        margin: 20px 0 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .tag {
+        display: inline-block;
+        background: #dfeec3;
+        color: var(--primary-dark);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-weight: 700;
+      }
+
+      .detail-body {
+        color: var(--text);
+        font-size: 1.02rem;
+      }
+
+      .detail-facts {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin: 18px 0;
+      }
+
+      .detail-fact {
+        padding: 12px 14px;
+        border: 1px solid rgba(38, 123, 72, 0.1);
+        border-radius: 14px;
+        background: rgba(255,255,255,0.62);
+      }
+
+      .detail-fact strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--primary-dark);
+      }
+
+      .detail-body ul {
+        margin: 12px 0 0 18px;
+        padding: 0;
+        line-height: 1.7;
+      }
+
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        border: none;
+        background: var(--primary);
+        color: white;
+        border-radius: 12px;
+        padding: 10px 16px;
+        margin-bottom: 18px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .home-intro {
+        max-width: 680px;
+        margin: 0 0 30px;
+        color: #526257;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      .primary-feature-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .primary-feature-card {
+        display: flex;
+        min-height: 150px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 22px;
+        border: 1px solid rgba(31, 41, 55, 0.1);
+        border-radius: 24px;
+        background: #fff;
+        color: var(--primary-dark);
+        font: inherit;
+        font-size: clamp(1.15rem, 2vw, 1.65rem);
+        font-weight: 800;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+        box-shadow: 0 8px 18px rgba(20, 48, 31, 0.1);
+      }
+
+      .primary-feature-card:hover {
+        transform: translateY(-4px);
+        filter: saturate(1.08);
+        box-shadow: 0 16px 30px rgba(19, 47, 32, 0.16);
+      }
+
+      .primary-feature-card:focus-visible {
+        outline: 3px solid var(--primary);
+        outline-offset: 4px;
+      }
+
+      .primary-feature-icon {
+        display: grid;
+        width: 66px;
+        height: 66px;
+        place-items: center;
+        border: 1px solid rgba(255,255,255,0.75);
+        border-radius: 21px;
+        background: rgba(255,255,255,0.72);
+        box-shadow: 0 5px 12px rgba(31, 41, 55, 0.1);
+        font-size: 2.55rem;
+        line-height: 1;
+      }
+
+      .primary-feature-card[data-feature-group="explore"] { background: linear-gradient(135deg, #e9f8d6, #d4efb8); }
+      .primary-feature-card[data-feature-group="play"] { background: linear-gradient(135deg, #f1e5ff, #dfccff); }
+      .primary-feature-card[data-feature-group="protect"] { background: linear-gradient(135deg, #dcf5ed, #bdebdc); }
+      .primary-feature-card[data-feature-group="favorites"] { background: linear-gradient(135deg, #ffe7f1, #f7cfe2); }
+
+      .feature-grid {
+        display: grid;
+        gap: 15px;
+      }
+
+      .feature-grid.selection-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .feature-card {
+        min-height: 180px;
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,0.55);
+        border-radius: 22px;
+        background: #fff;
+        color: #26332b;
+        text-align: left;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 24px rgba(19, 47, 32, 0.14);
+      }
+
+      .feature-card:focus-visible, .back-btn:focus-visible, .action-btn:focus-visible,
+      .filter:focus-visible, .favorite-toggle:focus-visible, .icon-btn:focus-visible {
+        outline: 3px solid #e59328;
+        outline-offset: 3px;
+      }
+
+      .feature-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 58px;
+        height: 58px;
+        margin-bottom: 13px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.55);
+        box-shadow: inset 0 2px 8px rgba(255,255,255,0.45);
+        font-size: 2.25rem;
+      }
+
+      .feature-card strong {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 1.08rem;
+      }
+
+      .feature-card span:last-child {
+        color: #657168;
+        line-height: 1.4;
+      }
+
+      .feature-card[data-feature="find"] { background: #e4f4d0; }
+      .feature-card[data-feature="habitats"] { background: #d9f1eb; }
+      .feature-card[data-feature="daily"] { background: #fff0c8; }
+      .feature-card[data-feature="quiz"] { background: #eee0ff; }
+      .feature-card[data-feature="detective"] { background: #dff3e1; }
+      .feature-card[data-feature="conservation"] { background: #e4f3dd; }
+      .feature-card[data-feature="favorites"] { background: #f9dff0; }
+
+      .section-title {
+        margin: 0 0 10px;
+        color: var(--primary-dark);
+        font-size: clamp(2rem, 4vw, 3rem);
+      }
+
+      .section-copy {
+        margin: 0 0 24px;
+        color: #59685f;
+        line-height: 1.6;
+      }
+
+      .habitat-grid, .choice-grid, .favorite-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .habitat-card, .choice-card, .favorite-card, .game-panel {
+        padding: 20px;
+        border: 1px solid rgba(31, 41, 55, 0.08);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.45);
+      }
+
+      .habitat-card, .choice-card, .favorite-card {
+        color: var(--primary-dark);
+      }
+
+      button.habitat-card, button.choice-card {
+        width: 100%;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .habitat-card h3, .choice-card h3, .favorite-card h3 {
+        margin: 0 0 8px;
+      }
+
+      .habitat-card p, .choice-card p, .favorite-card p {
+        margin: 0;
+        color: #59685f;
+        line-height: 1.5;
+      }
+
+      .feature-animal {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      .feature-animal .animal-image {
+        width: 94px;
+        height: 94px;
+        font-size: 3.2rem;
+      }
+
+      .feature-animal h3 {
+        margin: 0 0 5px;
+        color: var(--primary-dark);
+        font-size: 1.6rem;
+      }
+
+      .answer-btn, .action-btn {
+        border: 0;
+        border-radius: 12px;
+        background: var(--primary);
+        color: white;
+        padding: 12px 16px;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .answer-btn {
+        width: 100%;
+        margin: 5px 0;
+        background: rgba(255,255,255,0.72);
+        border: 1px solid var(--border);
+        color: var(--primary-dark);
+        text-align: left;
+      }
+
+      .answer-btn:hover, .action-btn:hover {
+        filter: brightness(0.96);
+      }
+
+      .answer-btn:disabled {
+        cursor: default;
+      }
+
+      .game-feedback {
+        min-height: 1.5em;
+        margin: 14px 0 0;
+        color: var(--primary-dark);
+        font-weight: 700;
+      }
+
+      #quitQuiz {
+        display: flex;
+        margin-left: auto;
+      }
+
+      #nextMystery.is-replay {
+        display: flex;
+        margin-left: auto;
+      }
+
+      .conservation-page {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+
+      .conservation-animal:focus-visible {
+        outline: 3px solid #e59328;
+        outline-offset: 3px;
+      }
+
+      .conservation-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .conservation-animal {
+        display: grid;
+        grid-template-columns: 54px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: #fff;
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .conservation-animal:hover {
+        border-color: var(--primary);
+      }
+
+      .conservation-animal-icon {
+        display: grid;
+        width: 54px;
+        height: 54px;
+        place-items: center;
+        border-radius: 13px;
+        background: #eaf4e3;
+        font-size: 2rem;
+      }
+
+      .conservation-animal-name {
+        display: block;
+        margin-bottom: 5px;
+        color: var(--primary-dark);
+        font-weight: 800;
+      }
+
+      .conservation-status {
+        display: inline-block;
+        border-radius: 999px;
+        background: #fff0cf;
+        color: #704d00;
+        padding: 3px 8px;
+        font-size: .75rem;
+        font-weight: 700;
+      }
+
+      .conservation-status.is-endangered,
+      .conservation-status.is-critical {
+        background: #fbe2df;
+        color: #8b2f25;
+      }
+
+      .conservation-arrow {
+        color: var(--muted);
+        font-size: 1.5rem;
+      }
+
+      .favorite-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .favorite-card .animal-image {
+        width: 58px;
+        height: 58px;
+        font-size: 2rem;
+      }
+
+      .favorite-card h3 {
+        flex: 1;
+      }
+
+      .icon-btn {
+        border: 0;
+        background: transparent;
+        color: var(--primary-dark);
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      .favorite-toggle {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: rgba(255,255,255,0.7);
+        color: var(--primary-dark);
+        padding: 8px 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .detail-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 22px;
+      }
+
+      .empty-message {
+        grid-column: 1 / -1;
+        padding: 28px;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.4);
+        color: #59685f;
+      }
+
+      .achievement-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .achievement-card {
+        padding: 18px;
+        border: 1px solid rgba(38, 123, 72, 0.12);
+        border-radius: 18px;
+        background: linear-gradient(135deg, #f0f8e8, #e3f1d9);
+        color: var(--primary-dark);
+      }
+
+      .achievement-card.is-locked {
+        background: rgba(255,255,255,0.42);
+        color: #69756d;
+      }
+
+      .achievement-icon {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 2rem;
+      }
+
+      .achievement-card h3 {
+        margin: 0 0 6px;
+      }
+
+      .achievement-card p {
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 900px) {
+        .primary-feature-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 700px) {
+        .animal-grid, .habitat-grid, .choice-grid, .favorite-grid, .feature-grid.selection-grid, .achievement-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .primary-feature-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-banner {
+          grid-template-columns: 1fr;
+          gap: 0;
+          min-height: 0;
+          padding: 26px;
+        }
+
+        .hero-art {
+          position: absolute;
+          right: -24px;
+          bottom: -30px;
+          opacity: 0.28;
+          font-size: 10rem;
+        }
+
+        .hero-copy {
+          max-width: 540px;
+        }
+      }
+
+      @media (max-width: 460px) {
+        .page {
+          padding: 18px 14px 32px;
+        }
+
+        .feature-grid {
+          gap: 10px;
+        }
+
+        .feature-card {
+          min-height: 155px;
+          padding: 15px;
+        }
+
+        .feature-card strong {
+          font-size: 1rem;
+        }
+
+        .feature-heading {
+          display: block;
+        }
+
+        .feature-heading p {
+          margin-top: 6px;
+        }
+
+        .hero-art {
+          right: -42px;
+          font-size: 8rem;
+        }
+
+        .splash-screen {
+          padding-right: 18px;
+          padding-left: 18px;
+        }
+
+        .splash-scene {
+          min-height: 24vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="splashPage" class="splash-screen">
+      <div class="splash-brand">
+        <div class="splash-paw" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <circle cx="17" cy="19" r="7"></circle>
+            <circle cx="31" cy="12" r="7"></circle>
+            <circle cx="46" cy="17" r="7"></circle>
+            <circle cx="55" cy="30" r="6"></circle>
+            <path d="M11 47c0-8 8-15 17-15 5 0 8 3 11 3s6-3 10-3c8 0 14 7 14 14 0 6-5 10-11 10H22c-6 0-11-3-11-9z"></path>
+          </svg>
+        </div>
+        <h1 class="splash-title">Wild<span>Quest</span></h1>
+        <p class="splash-tagline">Discover. Learn. Protect.</p>
+      </div>
+      <div class="splash-scene" aria-hidden="true">
+        <span class="splash-sun">☀️</span>
+        <span class="splash-animal">🦁</span>
+        <span class="splash-animal">🐘</span>
+        <span class="splash-animal">🐼</span>
+        <span class="splash-animal">🐅</span>
+      </div>
+      <div>
+        <p class="splash-copy">Every animal has a story. Discover amazing wildlife and explore together.</p>
+        <button id="getStartedBtn" class="get-started-btn" type="button">Get Started <span aria-hidden="true">→</span></button>
+        <p class="splash-footer">Curious minds. Kinder tomorrows.</p>
+      </div>
+    </main>
+
+    <main id="homePage" class="page home-page hidden">
+      <section class="hero-banner">
+        <div class="hero-copy">
+          <div class="brand-lockup">
+            <span class="brand-paw" aria-hidden="true">
+              <svg viewBox="0 0 64 64">
+                <circle cx="17" cy="19" r="7"></circle>
+                <circle cx="31" cy="12" r="7"></circle>
+                <circle cx="46" cy="17" r="7"></circle>
+                <circle cx="55" cy="30" r="6"></circle>
+                <path d="M11 47c0-8 8-15 17-15 5 0 8 3 11 3s6-3 10-3c8 0 14 7 14 14 0 6-5 10-11 10H22c-6 0-11-3-11-9z"></path>
+              </svg>
+            </span>
+            <div>
+              <h1 class="brand-name">Wild<span>Quest</span></h1>
+              <p class="brand-tagline">Discover. Learn. Protect.</p>
+            </div>
+          </div>
+          <h2>Explore the incredible world of wildlife!</h2>
+          <p>Learn amazing facts, test your knowledge, and discover how every animal has a story.</p>
+          <div class="hero-actions" aria-label="WildQuest goals">
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">🐅</div>
+      </section>
+      <div class="feature-heading">
+        <h2>Choose your adventure</h2>
+        <p>Explore, learn, and play</p>
+      </div>
+      <div class="primary-feature-grid">
+        <button class="primary-feature-card" type="button" data-feature-group="explore">
+          <span class="primary-feature-icon" aria-hidden="true">🔎</span><span>Explore</span>
+        </button>
+        <button class="primary-feature-card" type="button" data-feature-group="play">
+          <span class="primary-feature-icon" aria-hidden="true">🎮</span><span>Play</span>
+        </button>
+        <button class="primary-feature-card" type="button" data-feature-group="protect">
+          <span class="primary-feature-icon" aria-hidden="true">🌍</span><span>Protect</span>
+        </button>
+        <button class="primary-feature-card" type="button" data-feature-group="favorites">
+          <span class="primary-feature-icon" aria-hidden="true">❤️</span><span>Favorites</span>
+        </button>
+      </div>
+    </main>
+
+    <main id="listPage" class="page list-page hidden">
+      <button class="back-btn home-btn" type="button">← Home</button>
+      <h1>WildQuest</h1>
+
+      <div class="search-wrap">
+        <input id="searchInput" type="text" placeholder="Search animals, habitats, or categories..." />
+      </div>
+
+      <div class="filters">
+        <button class="filter active" data-category="All">All</button>
+        <button class="filter" data-category="Mammal">Mammal</button>
+        <button class="filter" data-category="Bird">Bird</button>
+        <button class="filter" data-category="Fish">Fish</button>
+        <button class="filter" data-category="Reptile">Reptile</button>
+      </div>
+
+      <div id="resultsTitle" class="results-header">0 animals found</div>
+      <div id="animalList" class="animal-grid"></div>
+    </main>
+
+    <main id="detailPage" class="page detail-page hidden">
+      <button id="backBtn" class="back-btn" type="button">← Back to animals</button>
+      <div id="animalDetail" class="detail-panel"></div>
+    </main>
+
+    <main id="featurePage" class="page hidden">
+      <button class="back-btn home-btn" type="button">← Home</button>
+      <div id="featureContent"></div>
+    </main>
+
+    <script>
+      const animals = [
+        {
+          id: 1,
+          name: "African Elephant",
+          scientificName: "Loxodonta africana",
+          category: "Mammal",
+          habitat: "Savannas, forests, and deserts of Africa",
+          icon: "🐘",
+          conservation: "Vulnerable",
+          diet: "Grass, leaves, bark, and fruit",
+          funFacts: [
+            "African elephants are the largest land animals.",
+            "They have a highly developed social structure.",
+            "They use their trunks for drinking, feeding, and communication."
+          ],
+          lifeSpan: "60-70 years in the wild", 
+          about: "African elephants are known for their intelligence and strong social bonds.",
+          Size: "10-13 feet tall at the shoulder",
+          Weight: "6000-13000 lbs"
+        },
+        {
+          id: 2,
+          name: "Bald Eagle",
+          scientificName: "Haliaeetus leucocephalus",
+          category: "Bird",
+          habitat: "North America",
+          icon: "🦅",
+          conservation: "Least Concern",
+          diet: "Fish, small mammals, and carrion",
+          funFacts: [
+            "Bald eagles are the national bird of the United States.",
+            "They build the largest nests of any North American bird.",
+            "They have excellent eyesight for hunting."
+          ],
+          lifeSpan: "20 years in the wild",
+          about: "Bald eagles are powerful birds of prey known for their keen eyesight and impressive hunting skills.",
+          Size: "28-40 inches in length",
+          Weight: "6.6-14 lbs"
+        },
+        {
+          id: 3,
+          name: "Green Sea Turtle",
+          scientificName: "Chelonia mydas",
+          category: "Reptile",
+          habitat: "Tropical and subtropical oceans worldwide",
+          icon: "🐢",
+          conservation: "Endangered",
+          diet: "Seagrasses and algae",
+          lifeSpan: "Up to 80 years",
+          about: "Green sea turtles are large sea turtles known for their long migrations and herbivorous diet.",
+          Size: "3-4 feet in length",
+          Weight: "300-500 lbs",
+          funFacts: [
+            "Green sea turtles are named for the green color of their body fat.",
+            "They can live up to 80 years.",
+            "They migrate long distances between feeding and nesting sites."
+          ]
+         
+        },
+        {
+          id: 4,
+          name: "Snake",
+          scientificName: "Serpentes",
+          category: "Reptile",
+          habitat: "Forests, grasslands, and deserts worldwide",
+          icon: "🐍",
+          conservation: "Vulnerable",
+          diet: "Other snakes, lizards, and small mammals",
+          funFacts: [
+            "Snakes are a diverse group of legless reptiles found worldwide.",
+            "They use their forked tongues to sense their environment.",
+            "Some species are venomous, while others constrict their prey."
+          ],
+          lifeSpan: "10-15 years in the wild",
+          about: "Snakes are legless reptiles with elongated bodies, found in a variety of habitats worldwide.",
+          Size: "10-13 feet in length",
+          Weight: "20-30 lbs"
+        },
+        {
+          id: 5,
+          name: "Giant Panda",
+          scientificName: "Ailuropoda melanoleuca",
+          category: "Mammal",
+          habitat: "Mountainous regions of central China",
+          icon: "🐼",
+          conservation: "Vulnerable",
+          diet: "Bamboo",
+          funFacts: [
+            "Giant pandas have a pseudo-thumb to help them grasp bamboo.",
+            "They spend most of their day eating bamboo.",
+            "They are excellent climbers and swimmers."
+          ],
+          lifeSpan: "They have a life span of around 20 years in the wild.",
+          about: "Giant pandas are known for their distinctive black-and-white coloring and their diet primarily consisting of bamboo.",
+          Size: "4-6 feet in length",
+          Weight: "220-330 lbs"
+        },
+        {
+          id: 6,
+          name: "Snow Leopard",
+          scientificName: "Panthera uncia",
+          category: "Mammal",
+          habitat: "Mountain ranges of Central and South Asia",
+          icon: "🐆",
+          conservation: "Vulnerable",
+          diet: "Ungulates, small mammals, and birds",
+          funFacts: [
+            "Snow leopards have thick fur and long tails for cold mountain environments.",
+            "They are excellent climbers and can leap great distances.",
+            "They are elusive and rarely seen in the wild."
+          ],
+          lifeSpan: "10-12 years in the wild",
+          about: "Snow leopards are elusive big cats adapted to cold mountainous regions.",
+          Size: "3-4.5 feet in length",
+          Weight: "60-120 lbs"
+        },
+        {
+          id: 7,
+          name: "Red Fox",
+          scientificName: "Vulpes vulpes",
+          category: "Mammal",
+          habitat: "Various habitats across the Northern Hemisphere",
+          icon: "🦊",
+          conservation: "Least Concern",
+          diet: "Small mammals, birds, fruits, and insects",
+          funFacts: [
+            "Red foxes are highly adaptable and can live in urban areas.",
+            "They have excellent hearing and can detect prey underground.",
+            "They use their bushy tails for balance and warmth."
+          ],
+          lifeSpan: "3-4 years in the wild",
+          about: "Red foxes are small, adaptable mammals known for their cunning behavior and bushy tails.",
+          Size: "18-35 inches in length",
+          Weight: "6-24 lbs"
+        },
+        {
+          id: 8,
+          name: "Emperor Penguin",
+          scientificName: "Aptenodytes forsteri",
+          category: "Bird",
+          habitat: "Antarctic",
+          icon: "🐧",
+          conservation: "Near Threatened",
+          diet: "Fish, squid, and krill",
+          funFacts: [
+            "Emperor penguins are the largest penguin species.",
+            "They can dive to great depths in search of food.",
+            "They endure harsh Antarctic winters to breed."
+          ],
+          lifeSpan: "They have a life span of around 20 years in the wild.",
+          about: "Emperor penguins are the largest penguin species and are known for their remarkable breeding behavior in the harsh Antarctic environment.",
+          Size: "45 inches in height",
+          Weight: "49-99 lbs" 
+        },
+        {
+          id: 9,
+          name: "Frog",
+          scientificName: "Anura",
+          category: "Amphibian",
+          habitat: "Various habitats worldwide",
+          icon: "🐸",
+          conservation: "Varies by species",
+          diet: "Insects, small invertebrates, and plants",
+          funFacts: [
+            "Frogs have powerful legs for jumping and swimming.",
+            "They undergo metamorphosis from tadpoles to adult frogs.",
+            "Some species can change color for camouflage."
+          ],
+          lifeSpan: "They have a life span of around 20 years in the wild.",
+          about: "Frogs are amphibians known for their jumping abilities, croaking sounds, and life cycle that includes metamorphosis from tadpoles.",
+          Size: "1-12 inches in length",
+          Weight: "0.1-1.5 lbs" 
+        },
+        {
+          id: 10,
+          name: "Snail",
+          scientificName: "Gastropoda",
+          category: "Mollusk",
+          habitat: "Various habitats worldwide",
+          icon: "🐌",
+          conservation: "Varies by species",
+          diet: "Plants, algae, and decaying matter",
+          funFacts: [
+            "Snails have a coiled shell into which they can retract for protection.",
+            "They move slowly using a muscular foot.",
+            "Some species are hermaphroditic, possessing both male and female reproductive organs."
+          ],
+          lifeSpan: "They have a life span of around 20 years in the wild.",
+          about: "Snails are mollusks known for their coiled shells, slow movement, and unique reproductive system.",
+          Size: "0.1-12 inches in length",
+          Weight: "0.01-1 lbs" 
+        },
+        {
+          id: 11,
+          name: "Fish",
+          scientificName: "Actinopterygii",
+          category: "Fish",
+          habitat: "Various aquatic habitats worldwide",
+          icon: "🐠",
+          conservation: "Near Threatened",
+          diet: "Small crustaceans and algae",
+          funFacts: [
+            "Fish live in various aquatic environments.",
+            "They have gills for breathing underwater.",
+            "They come in a wide range of shapes, sizes, and colors."
+          ],
+          lifeSpan: "6-10 years in the wild",
+          about: "Fish are aquatic animals that have gills for breathing underwater and come in a wide variety of species.",
+          Size: "4-5 inches in length",
+          Weight: "0.2-0.3 lbs"
+        },
+        {
+          id: 12,
+          name: "Elk",
+          scientificName: "Cervus canadensis",
+          category: "Mammal",
+          habitat: "North America",
+          icon: "🦌",
+          conservation: "Least Concern",
+          diet: "Grasses, plants, leaves, and bark",
+          funFacts: [
+            "Elk are one of the largest species within the deer family.",
+            "They are known for their impressive antlers.",
+            "Elk are social animals and often form herds."
+          ],
+          lifeSpan: "8-13 years in the wild",
+          about: "Elk are large members of the deer family known for their impressive antlers and social behavior.",
+          Size: "4.5-5 feet in height",
+          Weight: "500-700 lbs"
+        },
+        {
+          id: 13,
+          name: "Mule",
+          scientificName: "Equus mulus",
+          category: "Mammal",
+          habitat: "North America",
+          icon: "🫏",
+          conservation: "Least Concern",
+          diet: "Omnivorous",
+          funFacts: [
+            "Mules are known for their strength and endurance.",
+            "They have excellent hearing and sense of smell.",
+            "They are generally social animals and often form herds."
+          ],
+          lifeSpan: "They have a life span of around 20 years in the wild.",
+          about: "Mules are hybrid animals resulting from the crossbreeding of a male donkey and a female horse, known for their strength and endurance.",
+          Size: "4.5-5 feet in height",
+          Weight: "400-500 lbs"
+        },
+        {
+          id: 14,
+          name: "Blue Whale",
+          scientificName: "Balaenoptera musculus",
+          category: "Mammal",
+          habitat: "Oceans worldwide",
+          icon: "🐋",
+          conservation: "Least Concern",
+          diet: "Fish, squid, and marine mammals",
+          funFacts: [
+            "Blue whales are the largest animals on Earth.",
+            "They are filter feeders, primarily consuming krill.",
+            "Blue whales can reach lengths of up to 100 feet." 
+          ],
+          lifeSpan: "They have a life span of around 50-80 years in the wild.",
+          about: "Blue whales are the largest animals on Earth, known for their immense size and filter-feeding habits.",
+          Size: "80-100 feet in length",
+          Weight: "200,000-300,000 lbs"
+        },
+        {
+          id: 15 ,
+          name: "Cats",
+          scientificName: "Felis catus",
+          category: "Mammal",
+          habitat: "Domestic",
+          icon: "🐱",
+          conservation: "Not Evaluated",
+          diet: "High protein foods",
+          funFacts: [
+            "Cats come in a variety of breeds, colors, and patterns.",
+            "They are known for their agility and hunting skills.",
+            "Cats are popular pets and are often kept for companionship."
+          ],
+          lifeSpan: "They have a life span of around 18 years in captivity.",
+          about: "Cats are small, domesticated carnivorous mammals known for their agility, hunting skills, and companionship.",
+          Size: "9-10 inches in height",
+          Weight: "5-20 lbs"
+        },
+        {
+          id: 16,
+          name: "Bottle nose dolphin",
+          scientificName: "Tursiops truncatus",
+          category: "Mammal",
+          habitat: "Oceans worldwide",
+          icon: "🐬",
+          conservation: "Not Evaluated",
+          diet: "Fish, squid, and crustaceans",
+          funFacts: [
+            "Bottle nose dolphins are highly intelligent and social animals.",
+            "Bottle nose dolphins communicate using a variety of clicks, whistles, and body movements.",
+            "They are known for their playful behavior and acrobatics."
+          ],
+          lifeSpan: "They have a life span of around 40-60 years in the wild.",
+          about: "Bottle nose dolphins are known for their intelligence and playful behavior.",
+          Size: "6-13 feet",
+          Weight: "300-1400 kg"
+        },
+        {
+          id: 17,
+          name: "Lion",
+          scientificName: "Panthera leo",
+          category: "Mammal",
+          habitat: "Savannas, grasslands, and open woodlands",
+          icon: "🦁",
+          conservation: "Vulnerable",
+          diet: "Ungulates and other large mammals",
+          funFacts: [
+            "Lions are social animals and live in groups called prides.",
+            "Male lions have a distinctive mane.",
+            "Lions are apex predators and play a crucial role in their ecosystem."
+          ],
+          lifeSpan: "They have a life span of around 10-14 years in the wild.",
+          about: "Lions are large carnivorous felines known for their social structure, strength, and role as apex predators in their ecosystem.",
+          Size: "4-5 feet in height at the shoulder",
+          Weight: "330-550 lbs"
+        },
+        {
+          id: 18,
+          name: "Tiger",
+          scientificName: "Panthera tigris",
+          category: "Mammal",
+          habitat: "Forests, grasslands, and wetlands",
+          icon: "🐅",
+          conservation: "Endangered",
+          diet: "Ungulates and other large mammals",
+          funFacts: [
+            "Tigers are the largest cat species in the world.",
+            "They have distinctive orange coats with black stripes.",
+            "Tigers are solitary animals and are excellent swimmers."
+          ],
+          lifeSpan: "They have a life span of around 10-15 years in the wild.",
+          about: "Tigers are large carnivorous felines known for their strength, distinctive striped coats, and solitary behavior.",
+          Size: "3-3.5 feet in height at the shoulder",
+          Weight: "220-660 lbs"
+        },
+        {
+          id: 19,
+          name: "Shark",
+          scientificName: "Carcharodon carcharias",
+          category: "Fish",
+          habitat: "Oceans",
+          icon: "🦈",
+          conservation: "Vulnerable",
+          diet: "Fish, seals, and other marine animals",
+          funFacts: [
+            "Sharks have been around for over 400 million years.",
+            "Baby sharks are called pups.",
+            "Sharks are apex predators in their marine ecosystems."
+          ],
+          lifeSpan: "They have a life span of around 20-30 years in the wild.",
+          about: "Sharks are large predatory fish known for their sharp teeth, keen senses, and role as apex predators in marine ecosystems.",
+          Size: "10-20 feet in length",
+          Weight: "1,500-5,000 lbs"
+        },
+        {
+          id: 20,
+          name: "Jellyfish",
+          scientificName: "Aurelia aurita",
+          category: "Cnidarian",
+          habitat: "Oceans",
+          icon: "🪼",
+          conservation: "Not Evaluated",
+          diet: "Plankton and small marine organisms",
+          funFacts: [
+            "Jellyfish have been around for over 500 million years.",
+            "They are composed mostly of water and have no brain or heart.",
+            "Some species of jellyfish are bioluminescent, meaning they can produce their own light."
+          ],
+          lifeSpan: "They have a life span of around 18 years in captivity.",
+          about: "Jellyfish are gelatinous marine animals known for their umbrella-shaped bodies and stinging tentacles.",
+          Size: "Up to 12 inches in diameter",
+          Weight: "Varies, typically a few pounds"
+        },
+        {
+          id: 21,
+          name: "Cheetah",
+          scientificName: "Acinonyx jubatus",
+          category: "Mammal",
+          habitat: "Grasslands and savannas",
+          icon: "🐆",
+          conservation: "Vulnerable",
+          diet: "Small to medium-sized ungulates",
+          funFacts: [
+            "Cheetahs are the fastest land animals, capable of reaching speeds up to 60-70 mph.",
+            "They have distinctive black 'tear marks' running from the eyes to the mouth.",
+            "Cheetahs are solitary hunters and rely on their speed to catch prey."
+          ],
+          lifeSpan: "They have a life span of around 10-12 years in the wild.",
+          about: "Cheetahs are large carnivorous felines known for their incredible speed, agility, and distinctive black 'tear marks' on their faces.",
+          Size: "2.3-2.8 feet in height at the shoulder",
+          Weight: "110-140 lbs"
+        },
+        {
+          id: 22,
+          name: "Monkey",
+          scientificName: "Cercopithecidae",
+          category: "Mammal",
+          habitat: "Tropical forests and savannas",
+          icon: "🐒",
+          conservation: "Vulnerable",
+          diet: "Fruits, leaves, and insects",
+          funFacts: [
+            "Monkeys are highly social animals and live in groups called troops.",
+            "Monkeys can use their bodies to swing from tree branches.",
+            "Monkeys communicate using a variety of vocalizations and body language."
+          ],
+          lifeSpan: "They have a life span of around 15-20 years in the wild.",
+          about: "Monkeys are highly social primates known for their intelligence, agility, and complex social structures.",
+          Size: "1-2 feet in height",
+          Weight: "10-30 lbs"
+        },
+        {
+          id: 23,
+          name: "Giraffe",
+          scientificName: "Giraffa camelopardalis",
+          category: "Mammal",
+          habitat: "Grasslands and savannas",
+          icon: "🦒",
+          conservation: "Vulnerable",
+          diet: "Leaves, especially from acacia trees",
+          funFacts: [
+            "Giraffes are the tallest land animals, with long necks that help them reach leaves high in trees.",
+            "They have distinctive coat patterns that are unique to each individual.",
+            "Giraffes have long tongues, around 18-20 inches, which they use to grasp leaves."
+          ],
+          lifeSpan: "They have a life span of around 25 years in the wild.",
+          about: "Giraffes are the tallest land animals, known for their long necks, distinctive coat patterns, and gentle nature.",
+          Size: "14-19 feet in height",
+          Weight: "1,600-3,000 lbs"
+          
+        },
+        {
+          id: 24,
+          name: "Koala",
+          scientificName: "Phascolarctos cinereus",
+          category: "Mammal",
+          habitat: "Eucalyptus forests in Australia",
+          icon: "🐨",
+          conservation: "Vulnerable",
+          diet: "Eucalyptus leaves",
+          funFacts: [
+            "Koalas are marsupials and carry their young in a pouch.",
+            "They sleep up to 18-22 hours a day.",
+            "Koalas have a highly specialized diet consisting mainly of eucalyptus leaves."
+          ],
+          lifeSpan: "They have a life span of around 13-18 years in the wild.",
+          about: "Koalas are arboreal marsupials native to Australia, known for their eucalyptus-based diet and sleepy lifestyle.",
+          Size: "2-3 feet in height",
+          Weight: "9-33 lbs"
+        },
+        {
+          id: 25,
+          name: "Dog",
+          scientificName: "Canis lupus familiaris",
+          category: "Mammal",
+          habitat: "Domestic",
+          icon: "🐶",
+          conservation: "Domesticated",
+          diet: "High protein foods",
+          funFacts: [
+            "Dogs are known for their loyalty and companionship.",
+            "They have a keen sense of smell and hearing.",
+            "Dogs come in a wide variety of breeds, each with unique characteristics."
+          ],
+          lifeSpan: "They have a life span of around 12-15 years as pets.",
+          about: "Dogs are domesticated mammals known for their loyalty, companionship, and diverse breeds.",
+          Size: "13.5-16.5 inches in height",
+          Weight: "17-23 lbs"
+        },
+         {
+          id: 26,
+          name: "Bunny",
+          scientificName: "Oryctolagus cuniculus",
+          category: "Mammal",
+          habitat: "Domestic",
+          icon: "🐇",
+          conservation: "Domesticated",
+          diet: "Grass and leafy vegetables",
+          funFacts: [
+            "Bunnies are known for their long ears and soft fur.",
+            "They have a strong sense of smell and hearing.",
+            "Bunnies come in a wide variety of breeds, each with unique characteristics."
+          ],
+          lifeSpan: "They have a life span of around 8-12 years as pets.",
+          about: "Bunnies are small, herbivorous mammals known for their long ears, soft fur, and gentle nature.",
+          Size: "10-16 inches in height",
+          Weight: "2-6 lbs"
+        },
+        {
+          id: 27,
+          name: "Octopus",
+          scientificName: "Octopus vulgaris",
+          category: "Mollusk",
+          habitat: "Marine",
+          icon: "🐙",
+          conservation: "Least Concern",
+          diet: "Crustaceans, mollusks, and small fish",
+          funFacts: [
+            "Octopuses have three hearts and blue blood.",
+            "They are highly intelligent and can solve complex problems.",
+            "Octopuses can change color and texture to blend into their surroundings."
+          ],
+          lifeSpan: "They have a life span of around 1-2 years in the wild.",
+          about: "Octopuses are soft-bodied, marine mollusks known for their intelligence, ability to camouflage, and eight arms.",
+          Size: "1-3 feet in length",
+          Weight: "6-33 lbs"
+        },
+        {
+          id: 28,
+          name: "Parrot",
+          scientificName: "Psittaciformes",
+          category: "Bird",
+          habitat: "Tropical and subtropical regions",
+          icon: "🦜",
+          conservation: "Varies by species",
+          diet: "Seeds, fruits, nuts, and occasionally insects",
+          funFacts: [
+            "Parrots are known for their bright plumage and strong beaks.",
+            "They are highly intelligent and can mimic human speech.",
+            "Parrots form strong bonds with their mates and social groups."
+          ],
+          lifeSpan: "They have a life span of around 50-70 years in the wild.",
+          about: "Parrots are colorful, intelligent birds known for their ability to mimic sounds and their strong social bonds.",
+          Size: "10-40 inches in length depending on species",
+          Weight: "0.1-4 lbs depending on species"
+        },
+        {
+          id: 29,
+          name: "Spider",
+          scientificName: "Araneae",
+          category: "Arachnid",
+          habitat: "Various terrestrial habitats",
+          icon: "🕷️",
+          conservation: "Varies by species",
+          diet: "Insects and other small arthropods",
+          funFacts: [
+            "Spiders have eight legs and can produce silk from spinnerets.",
+            "They use silk to create webs for catching prey or for shelter.",
+            "Some spiders are venomous and use venom to subdue their prey."
+          ],
+          lifeSpan: "They have a life span of around 1-2 years in the wild.",
+          about: "Spiders are arachnids known for their eight legs, ability to produce silk, and diverse hunting strategies.",
+          Size: "0.04-12 inches in length depending on species",
+          Weight: "0.0001-0.5 lbs depending on species"
+        },
+        {
+          id: 30,
+          name: "Armadillo",
+          scientificName: "Dasypodidae",
+          category: "Mammal",
+          habitat: "Grasslands, forests, and semi-deserts",
+          icon: "🦔",
+          conservation: "Varies by species",
+          diet: "Insects, small vertebrates, and plants",
+          funFacts: [
+            "Armadillos have a hard protective shell made of bony plates.",
+            "They are primarily nocturnal and have strong digging abilities.",
+            "Some species can roll into a ball to protect themselves from predators."
+          ],
+          lifeSpan: "They have a life span of around 4-15 years in the wild.",
+          about: "Armadillos are small to medium-sized mammals known for their armored shells and burrowing habits.",
+          Size: "5-59 inches in length depending on species",
+          Weight: "3-120 lbs depending on species"
+        },
+        {
+          id: 31,
+          name: "Reindeer",
+          scientificName: "Rangifer tarandus",
+          category: "Mammal",
+          habitat: "Arctic and subarctic regions",
+          icon: "🦌",
+          conservation: "Varies by species",
+          diet: "Lichens, grasses, and other vegetation",
+          funFacts: [
+            "Reindeer are well adapted to cold environments with thick fur and large hooves.",
+            "Both male and female reindeer grow antlers, which is unique among deer species.",
+            "Reindeer are known for their long migrations across the Arctic tundra."
+          ],
+          lifeSpan: "They have a life span of around 15 years in the wild.",
+          about: "Reindeer are large herbivorous mammals known for their antlers and adaptations to cold climates.",
+          Size: "3.3-4.9 feet in length depending on species",
+          Weight: "180-400 lbs depending on species"
+        },
+        {
+          id: 32,
+          name: "Sailfish",
+          scientificName: "Istiophoridae",
+          category: "Fish",
+          habitat: "Tropical and subtropical oceans",
+          icon: "🐟",
+          conservation: "Least Concern",
+          diet: "Small fish and squid",
+          funFacts: [
+            "Sailfish are known for their incredible speed and agility in the water.",
+            "They have a long, pointed bill used for hunting small fish.",
+            "Sailfish can leap out of the water to escape predators."
+          ],
+          lifeSpan: "They have a life span of around 4-5 years in the wild.",
+          about: "Sailfish are fast, predatory fish known for their speed, agility, and distinctive sail-like dorsal fin.",
+          Size: "5.7-11 feet in length",
+          Weight: "120-220 lbs"
+        },
+        {
+          id: 33,
+          name: "Grizzly Bear",
+          scientificName: "Ursus arctos horribilis",
+          category: "Mammal",
+          habitat: "North America",
+          icon: "🐻",
+          conservation: "Least Concern",
+          diet: "Fish, berries, and small mammals",
+          funFacts: [
+            "Grizzly bears have a keen sense of smell.",
+            "They can run at speeds of up to 35 miles per hour.",
+            "They hibernate during the winter months."
+          ],
+          lifeSpan: "They have a life span of around 20 years in the wild.",
+          about: "Grizzly bears are large mammals known for their strength, distinctive hump on their shoulders, and omnivorous diet.",
+          Size: "3.3-4.9 feet in height at the shoulder",
+          Weight: "400-790 lbs"
+         },
+         {
+          id: 34,
+          name: "Crab",
+          scientificName: "Brachyura",
+          category: "Crustacean",
+          habitat: "Various aquatic environments",
+          icon: "🦀",
+          conservation: "Near Threatened",
+          diet: "Small crustaceans and algae",
+          funFacts: [
+            "Crabs have a hard exoskeleton for protection.",
+            "They can regenerate lost limbs.",
+            "They are known for their sideways walking."
+          ],
+          lifeSpan: "6-10 years in the wild",
+          about: "Crabs are crustaceans with a hard exoskeleton, pincers, and multiple legs, commonly found in various aquatic environments.",
+          Size: "4-5 inches in length",
+          Weight: "0.2-0.3 lbs"
+        },
+        {
+          id: 35,
+          name: "Polar Bear",
+          scientificName: "Ursus maritimus",
+          category: "Mammal",
+          habitat: "Arctic regions of North America and Eurasia",
+          icon: "🐻‍❄️",
+          conservation: "Least Concern",
+          diet: "Seals and other marine mammals",
+          funFacts: [
+            "Polar bears have a keen sense of smell.",
+            "They are excellent swimmers and can cover long distances in search of food.",
+            "They primarily hunt seals on sea ice."
+          ],
+          lifeSpan: "They have a life span of around 25-30 years in the wild.",
+          about: "Polar bears are large carnivorous mammals adapted to life in the Arctic, known for their strength, swimming ability, and reliance on sea ice for hunting.",
+          Size: "3.3-4.9 feet in height at the shoulder",
+          Weight: "400-790 lbs"
+        },
+        {
+          id: 36,
+          name: "Ant",
+          scientificName: "Formicidae",
+          category: "Insect",
+          habitat: "Various terrestrial environments",
+          icon: "🐜",
+          conservation: "Least Concern",
+          diet: "Plant material and small insects",
+          funFacts: [
+            "Ants are social insects that live in colonies.",
+            "They communicate using pheromones.",
+            "They can lift many times their own body weight."
+          ],
+          lifeSpan: "They have a life span of around 25-30 years in the wild.",
+          about: "Ants are small insects known for their complex social structures, teamwork, and ability to adapt to various environments.",
+          Size: "0.08-1 inch in length",
+          Weight: "0.0001-0.01 lbs"
+        },
+        {
+          id: 37,
+          name: "Chicken",
+          scientificName: "Gallus gallus domesticus",
+          category: "Bird",
+          habitat: "Domestic and farm environments worldwide",
+          icon: "🐔",
+          conservation: "Least Concern",
+          diet: "Grains, seeds, and insects",
+          funFacts: [
+            "Chickens are domesticated birds commonly kept for their eggs and meat.",
+            "They have a strong social hierarchy known as the pecking order.",
+            "Chickens can recognize over 100 different faces of people or animals."
+          ],
+          lifeSpan: "They have a life span of around 5-10 years in the wild.",
+          about: "Chickens are domesticated birds known for their egg-laying abilities, social behavior, and adaptability to various environments.",
+          Size: "1.6-2.5 feet in height",
+          Weight: "5-10 lbs"
+        },
+        {
+          id: 38,
+          name: "Owl",
+          scientificName: "Strigiformes",
+          category: "Bird",
+          habitat: "Forests, grasslands, and deserts worldwide",
+          icon: "🦉",
+          conservation: "Least Concern",
+          diet: "Carnivorous: small mammals, insects, and other birds",
+          funFacts: [
+            "Owls are nocturnal birds of prey.",
+            "They have excellent night vision and silent flight.",
+            "Owls are known for their distinctive hooting calls."
+          ],
+          lifeSpan: "They have a life span of around 10-20 years in the wild.",
+          about: "Owls are birds of prey known for their nocturnal hunting, silent flight, and keen eyesight.",
+          Size: "1-2 feet in height",
+          Weight: "1-4 lbs"
+        },
+         {
+          id: 39,
+          name: "Butterfly",
+          scientificName: "Lepidoptera",
+          category: "Insect",
+          habitat: "Various environments including gardens, meadows, and forests",
+          icon: "🦋",
+          conservation: "Least Concern",
+          diet: "Nectar from flowers",
+          funFacts: [
+            "Butterflies undergo complete metamorphosis, including the stages of egg, larva (caterpillar), pupa (chrysalis), and adult.",
+            "They have large, colorful wings covered in tiny scales.",
+            "Butterflies are important pollinators in many ecosystems."
+          ],
+          lifeSpan: "They have a life span of around a few weeks to several months, depending on the species.",
+          about: "Butterflies are insects known for their colorful wings, metamorphic life cycle, and role as pollinators.",
+          Size: "0.5-12 inches in wingspan",
+          Weight: "0.1-1 oz"
+        },
+         {
+          id: 40,
+          name: "Turkey",
+          scientificName: "Meleagris gallopavo",
+          category: "Bird",
+          habitat: "Forests, grasslands, and farmlands",
+          icon: "🦃",
+          conservation: "Least Concern",
+          diet: "Seeds, fruits, and vegetables",
+          funFacts: [
+            "Turkeys are large birds native to North America.",
+            "They are known for their distinctive fan-shaped tail and wattled neck.",
+            "Turkeys are popular as a food source, especially during Thanksgiving."
+          ],
+          lifeSpan: "They have a life span of around 3-5 years in the wild.",
+          about: "Turkeys are large ground-dwelling birds known for their distinctive plumage and social behavior.",
+          Size: "36-48 inches in length",
+          Weight: "5-24 lbs"
+        },
+        {
+          id: 41,
+          name: "Snowshoe Hare",
+          scientificName: "Lepus americanus",
+          category: "Mammal",
+          habitat: "Arctic tundra and cold environments",
+          icon: "🐇",
+          conservation: "Least Concern",
+          diet: "Grasses, herbs, and bark",
+          funFacts: [
+            "Snowshoe hares have large hind feet that help them move on snow.",
+            "Their fur changes color with the seasons for camouflage.",
+            "They are primarily nocturnal and have strong hind legs for jumping."
+          ],
+          lifeSpan: "They have a life span of around 3-6 years in the wild.",
+          about: "Snowshoe hares are small mammals adapted to cold environments, known for their large hind feet and seasonal camouflage.",
+          Size: "1.5-2 feet in length",
+          Weight: "3.15 and 3.42 lbs in the wild"
+        },
+         {
+          id: 42,
+          name: "Seal",
+          scientificName: "Phoca vitulina",
+          category: "Mammal",
+          habitat: "Coastal waters and beaches",
+          icon: "🦭",
+          conservation: "Least Concern",
+          diet: "Fish, squid, and crustaceans",
+          funFacts: [
+            "Seals are marine mammals that are well adapted to aquatic life.",
+            "They have streamlined bodies and flippers for efficient swimming.",
+            "Seals can hold their breath for extended periods while diving for food."
+          ],
+          lifeSpan: "They have a life span of around 25-30 years in the wild.",
+          about: "Seals are marine mammals known for their swimming abilities, social behavior, and adaptability to coastal environments.",
+          Size: "4-6 feet in length",
+          Weight: "200-400 lbs"
+        },
+        {
+          id: 43,
+          name: "Platypus",
+          scientificName: "Ornithorhynchus anatinus",
+          category: "Mammal",
+          habitat: "Freshwater rivers and lakes in eastern Australia",
+          icon: "🦆",
+          conservation: "Near Threatened",
+          diet: "Insects, crustaceans, and aquatic plants",
+          funFacts: [
+            "Platypuses are one of the few mammals that lay eggs.",
+            "They have a distinctive duck-bill and webbed feet.",
+            "Platypuses are excellent swimmers and spend much of their time in the water."
+          ],
+          lifeSpan: "They have a life span of around 10-17 years in the wild.",
+          about: "Platypuses are unique mammals known for their egg-laying ability, aquatic lifestyle, and distinctive physical features.",
+          Size: "15 inches in length",
+          Weight: "2-5 lbs"
+        },
+         {
+          id: 44,
+          name: "Axolotl",
+          scientificName: "Ambystoma mexicanum",
+          category: "Amphibian",
+          habitat: "Freshwater lakes and ponds",
+          icon: "🦎",
+          conservation: "Least Concern",
+          diet: "Small aquatic animals, insects, and worms",
+          funFacts: [
+            "Axolotls are neotenic, meaning they retain juvenile features throughout their life.",
+            "They have the remarkable ability to regenerate lost body parts.",
+            "Axolotls are popular in scientific research due to their regenerative capabilities."
+          ],
+          lifeSpan: "They have a life span of around 10-15 years in captivity.",
+          about: "Axolotls are aquatic salamanders known for their regenerative abilities, neotenic traits, and importance in scientific research.",
+          Size: "4-7 inches in length",
+          Weight: "0.5-1 lbs"
+        },
+        {
+          id: 45,
+          name: "Humming Bird",
+          scientificName: "Archilochus colubris",
+          category: "Bird",
+          habitat: "Freshwater rivers and lakes in eastern Australia",
+          icon: "🐦",
+          conservation: "Near Threatened",
+          diet: "Nectar and small insects",
+          funFacts: [
+            "Hummingbirds are the only birds that can fly backwards.",
+            "They have incredibly fast wing beats, often around 50 times per second.",
+            "Hummingbirds have a high metabolism and need to eat frequently."
+          ],
+          lifeSpan: "They have a life span of around 10-17 years in the wild.",
+          about: "Hummingbirds are small, colorful birds known for their rapid wing beats, ability to hover, and high metabolism.",
+          Size: "3-5 inches in length",
+          Weight: "0.1-0.3 lbs"
+        },
+        {
+          id: 46,
+          name: "Sloth",
+          scientificName: "Folivora",
+          category: "Mammal",
+          habitat: "Tropical rainforests of Central and South America",
+          icon: "🦥",
+          conservation: "Vulnerable",
+          diet: "Leaves, fruits, and flowers",
+          funFacts: [
+            "Sloths are known for their slow movement and spend most of their time hanging upside down in trees.",
+            "They have a low metabolic rate and sleep for around 15-20 hours a day.",
+            "Sloths have a unique symbiotic relationship with algae that grow on their fur."
+          ],
+          lifeSpan: "They have a life span of around 20-30 years in the wild.",
+          about: "Sloths are slow-moving mammals known for their arboreal lifestyle, low metabolism, and unique symbiotic relationship with algae.",
+          Size: "20-28 inches in length",
+          Weight: "8-17 lbs"
+        },
+        {
+          id: 47,
+          name: "Zebra",
+          scientificName: "Equus quagga",
+          category: "Mammal",
+          habitat: "Savannas, grasslands, and open woodlands in Africa",
+          icon: "🦓",
+          conservation: "Near Threatened",
+          diet: "Grasses, leaves, and shoots",
+          funFacts: [
+            "Zebras are known for their distinctive black-and-white striped coats.",
+            "Each zebra's stripe pattern is unique, much like human fingerprints.",
+            "Zebras are social animals that live in herds for protection against predators."
+          ],
+          lifeSpan: "They have a life span of around 20-30 years in the wild.",
+          about: "Zebras are social herbivorous mammals known for their unique stripe patterns and strong herd behavior.",
+          Size: "4.5-5 feet in length",
+          Weight: "440-990 lbs"
+        },
+        {
+          id: 48,
+          name: "Clown Fish",
+          scientificName: "Amphiprioninae",
+          category: "Fish",
+          habitat: "Warm waters of the Indian and Pacific Oceans, including the Great Barrier Reef",
+          icon: "🐠",
+          conservation: "Least Concern",
+          diet: "Algae, plankton, and small invertebrates",
+          funFacts: [
+            "Clownfish have a symbiotic relationship with sea anemones.",
+            "They are known for their bright orange color with white stripes.",
+            "Clownfish can change their sex from male to female."
+          ],
+          lifeSpan: "They have a life span of around 6-10 years in the wild.",
+          about: "Clownfish are small, colorful fish known for their symbiotic relationship with sea anemones and their distinctive orange and white coloration.",
+          Size: "4-5 inches in length",
+          Weight: "0.2-0.3 lbs"
+        },
+        {
+          id: 49,
+          name: "Pigs",
+          scientificName: "Sus scrofa domesticus",
+          category: "Mammal",
+          habitat: "Farms and domestic environments worldwide",
+          icon: "🐖",
+          conservation: "Domesticated",
+          diet: "Omnivorous",
+          funFacts: [
+            "Pigs are highly intelligent animals and can be trained to perform various tasks.",
+            "They have a strong sense of smell and use it to find food.",
+            "Pigs are social animals that enjoy the company of other pigs."
+          ],
+          lifeSpan: "They have a life span of around 10-15 years in domestic environments.",
+          about: "Pigs are domesticated mammals known for their intelligence, social behavior, and omnivorous diet.",
+          Size: "4.5-6 feet in length",
+          Weight: "300-700 lbs"
+        },
+        {
+          id: 50,
+          name: "Gorilla",
+          scientificName: "Gorilla gorilla",
+          category: "Mammal",
+          habitat: "Tropical and subtropical forests in central Africa",
+          icon: "🦍",
+          conservation: "Critically Endangered",
+          diet: "Primarily herbivorous, eating leaves, stems, fruit, and occasionally insects",
+          funFacts: [
+            "Gorillas are the largest primates and are known for their strength.",
+            "They live in family groups called troops led by a dominant silverback male.",
+            "Gorillas are primarily herbivorous but may occasionally eat insects."
+          ],
+          lifeSpan: "They have a life span of around 35-40 years in the wild.",
+          about: "Gorillas are large, social primates known for their intelligence, strong family bonds, and primarily herbivorous diet.",
+          Size: "4-6 feet in length",
+          Weight: "300-500 lbs"
+        },
+        {
+          id: 51,
+          name: "Wolves",
+          scientificName: "Canis lupus",
+          category: "Mammal",
+          habitat: "Forests, grasslands, deserts, and tundra across the Northern Hemisphere",
+          icon: "🐺",
+          conservation: "Least Concern",
+          diet: "Carnivorous, primarily hunting ungulates but also eating smaller animals and carrion",
+          funFacts: [
+            "Wolves are highly social animals that live in packs.",
+            "They communicate using vocalizations, body language, and scent marking.",
+            "Wolves are skilled hunters and work together to take down prey."
+          ],
+          lifeSpan: "They have a life span of around 6-8 years in the wild, though some can live up to 13 years.",
+          about: "Wolves are social carnivorous mammals known for their pack behavior, hunting skills, and adaptability to various habitats.",
+          Size: "3-5 feet in length",
+          Weight: "50-110 lbs"
+        },
+        {
+          id: 52,
+          name: "Beavers",
+          scientificName: "Castor canadensis",
+          category: "Mammal",
+          habitat: "Freshwater rivers and lakes in North America",
+          icon: "🦫",
+          conservation: "Least Concern",
+          diet: "Tree bark, aquatic plants, and small invertebrates",
+          funFacts: [
+            "Beavers are known for building dams, lodges, and canals.",
+            "They have large, strong teeth for gnawing wood.",
+            "Beavers play a crucial role in maintaining wetland ecosystems."
+          ],
+          lifeSpan: "They have a life span of around 10-17 years in the wild.",
+          about: "Beavers are large, primarily nocturnal, semiaquatic rodents known for their dam-building behavior and impact on ecosystems.",
+          Size: "3-4 feet in length",
+          Weight: "35-60 lbs"
+        },
+        {
+          id: 53,
+          name: "Kangaroos",
+          scientificName: "Macropus",
+          category: "Mammal",
+          habitat: "Grasslands, savannas, and open forests in Australia",
+          icon: "🦘",
+          conservation: "Least Concern",
+          diet: "Herbivorous, mainly grasses and leaves",
+          funFacts: [
+            "Kangaroos are marsupials native to Australia.",
+            "They have powerful hind legs for jumping and a strong tail for balance.",
+            "Kangaroos are herbivorous and primarily feed on grasses."
+          ],
+          lifeSpan: "They have a life span of around 10-17 years in the wild.",
+          about: "Kangaroos are large marsupials known for their powerful hind legs, hopping locomotion, and herbivorous diet.",
+          Size: "3-8 feet in length",
+          Weight: "40-200 lbs"
+        },
+        {
+          id: 54,
+          name: "Flamingos",
+          scientificName: "Phoenicopterus",
+          category: "Bird",
+          habitat: "Shallow lakes, lagoons, and mangrove swamps in Africa, Asia, and the Americas",
+          icon: "🦩",
+          conservation: "Least Concern",
+          diet: "Algae, small crustaceans, and plankton",
+          funFacts: [
+            "Flamingos are known for their vibrant pink feathers.",
+            "They have long legs and necks adapted for wading in shallow waters.",
+            "Flamingos feed by filtering small organisms from the water with their specialized beaks."
+          ],
+          lifeSpan: "They have a life span of around 20-30 years in the wild.",
+          about: "Flamingos are large wading birds known for their striking pink coloration, long legs, and specialized feeding behavior.",
+          Size: "3.3-4.6 feet in length",
+          Weight: "4-8 lbs"
+        },
+        {
+          id: 55,
+          name: "Seahorses",
+          scientificName: "Hippocampus",
+          category: "Fish",
+          habitat: "Shallow coastal waters, seagrass beds, and coral reefs worldwide",
+          icon: "🪸",
+          conservation: "Vulnerable",
+          diet: "Small crustaceans and plankton",
+          funFacts: [
+            "Seahorses are known for their horse-like head shape.",
+            "Male seahorses carry and give birth to the young.",
+            "They use their prehensile tails to anchor themselves to seagrass and coral."
+          ],
+          lifeSpan: "They have a life span of around 1-5 years in the wild.",
+          about: "Seahorses are small marine fish known for their unique appearance, upright swimming posture, and male pregnancy.",
+          Size: "0.6-14 inches in length",
+          Weight: "0.04-0.2 lbs"
+        },
+        {
+          id: 56,
+          name: "Jaugurs",
+          scientificName: "Jauguridae",
+          category: "Mammal",
+          habitat: "Forests and grasslands in South America",
+          icon: "🐆",
+          conservation: "Vulnerable",
+          diet: "Small mammals, birds, and insects",
+          funFacts: [
+            "Jaugurs are known for their agility and hunting skills.",
+            "They have strong jaws and sharp teeth for capturing prey.",
+            "Jaugurs are solitary animals and are primarily nocturnal."
+          ],
+          lifeSpan: "They have a life span of around 12-15 years in the wild.",
+          about: "Jaugurs are medium-sized carnivorous mammals known for their hunting prowess and nocturnal behavior.",
+          Size: "2-3 feet in length",
+          Weight: "20-35 lbs"
+        },
+        {
+          id: 57,
+          name: "Mockingjay",
+          scientificName: "Mockingjayus fictitious",
+          category: "Mammal",
+          habitat: "Forests and grasslands in Panem",
+          icon: "🕊️",
+          conservation: "Fictional",
+          diet: "Berries and small insects",
+          funFacts: [
+            "Mockingjays are known for their mimicry and singing abilities.",
+            "They play a significant role in the culture and symbolism of Panem.",
+            "Mockingjays are highly intelligent and can remember complex songs."
+          ],
+          lifeSpan: "They have a life span of around 5-10 years in the wild.",
+          about: "Mockingjays are fictional birds known for their intelligence, mimicry, and cultural significance in Panem.",
+          Size: "12-14 inches in length",
+          Weight: "0.5-1 lbs"
+        },
+        {
+          id: 58,
+          name: "Foxes",
+          scientificName: "Vulpes vulpes",
+          category: "Mammal",
+          habitat: "Forests, grasslands, and urban areas in the Northern Hemisphere",
+          icon: "🦊",
+          conservation: "Least Concern",
+          diet: "Small mammals, birds, fruits, and insects",
+          funFacts: [
+            "Foxes are known for their cunning and adaptability.",
+            "They have bushy tails and sharp senses for hunting.",
+            "Foxes are primarily nocturnal and are skilled hunters."
+          ],
+          lifeSpan: "They have a life span of around 3-6 years in the wild.",
+          about: "Foxes are small to medium-sized mammals known for their intelligence, adaptability, and hunting skills.",
+          Size: "18-35 inches in length",
+          Weight: "6-24 lbs"
+        },
+        {
+          id: 59,
+          name: "Raccoons",
+          scientificName: "Procyon lotor",
+          category: "Mammal",
+          habitat: "Forests, marshes, and urban areas in North America",
+          icon: "🦝",
+          conservation: "Least Concern",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Raccoons are known for their dexterous front paws and masked facial markings.",
+            "They are highly adaptable and can thrive in urban environments.",
+            "Raccoons are primarily nocturnal and are skilled foragers."
+          ],
+          lifeSpan: "They have a life span of around 2-3 years in the wild.",
+          about: "Raccoons are medium-sized mammals known for their intelligence, adaptability, and distinctive facial markings.",
+          Size: "16-28 inches in length",
+          Weight: "8-20 lbs"
+        },
+          {
+          id: 60,
+          name: "Horse",
+          scientificName: "Equus ferus caballus",
+          category: "Mammal",
+          habitat: "Grasslands, steppes, and open woodlands",
+          icon: "🐴",
+          conservation: "Least Concern",
+          diet: "Herbivorous: grasses, hay, and grains",
+          funFacts: [
+            "Horses have been domesticated for thousands of years and are used for riding, work, and companionship.",
+            "They have strong, muscular bodies and long legs adapted for running.",
+            "Horses are social animals and often form strong bonds with humans and other horses."
+          ],
+          lifeSpan: "They have a life span of around 25-30 years in the wild.",
+          about: "Horses are large mammals known for their strength, speed, and social behavior.",
+          Size: "8-9 feet in length",
+          Weight: "900-2,200 lbs"
+        },
+          {
+          id: 61,
+          name: "Blue Whale",
+          scientificName: "Balaenoptera musculus",
+          category: "Mammal",
+          habitat: "Oceans worldwide",
+          icon: "🐋",
+          conservation: "Least Concern",
+          diet: "Carnivorous: primarily krill",
+          funFacts: [
+            "Blue whales are the largest animals ever known to have lived on Earth.",
+            "They can reach lengths of up to 100 feet and weigh as much as 200 tons.",
+            "Blue whales primarily feed on tiny shrimp-like animals called krill."
+          ],
+          lifeSpan: "They have a life span of around 70-90 years in the wild.",
+          about: "Blue whales are massive marine mammals known for their immense size and gentle nature.",
+          Size: "Up to 100 feet in length",
+          Weight: "Up to 200 tons"
+        },
+          {
+          id: 62,
+          name: "Belagu Whale",
+          scientificName: "Balaenoptera musculus",
+          category: "Mammal",
+          habitat: "Oceans worldwide",
+          icon: "🐋",
+          conservation: "Least Concern",
+          diet: "Carnivorous: primarily krill",
+          funFacts: [
+            "Belagu whales are large baleen whales found in the Indian Ocean.",
+            "They are known for their distinctive blue-gray coloration and long, slender bodies.",
+            "Belagu whales primarily feed on small fish and krill."
+          ],
+          lifeSpan: "They have a life span of around 70-90 years in the wild.",
+          about: "Belagu whales are large marine mammals known for their size, grace, and feeding behavior.",
+          Size: "Up to 80 feet in length",
+          Weight: "Up to 150 tons"
+        },
+          {
+          id: 63,
+          name: "Salamander",
+          scientificName: "Salamandra salamandra",
+          category: "Amphibian",
+          habitat: "Forests, marshes, and urban areas in Europe",
+          icon: "🦎",
+          conservation: "Least Concern",
+          diet: "Carnivorous: primarily insects and small invertebrates",
+          funFacts: [
+            "Salamanders are known for their smooth, moist skin and ability to regenerate lost limbs.",
+            "They are primarily nocturnal and are often found near water sources.",
+            "Salamanders have a varied diet that includes insects, worms, and other small invertebrates."
+          ],
+          lifeSpan: "They have a life span of around 10-20 years in the wild.",
+          about: "Salamanders are small amphibians known for their regenerative abilities and nocturnal habits.",
+          Size: "6-12 inches in length",
+          Weight: "0.5-1 lbs"
+        },  {
+          id: 64,
+          name: "Toad",
+          scientificName: "Anura",
+          category: "Amphibian",
+          habitat: "Forests, marshes, and urban areas in North America",
+          icon: "🐸",
+          conservation: "Least Concern",
+          diet: "Carnivorous: primarily insects and small invertebrates",
+          funFacts: [
+            "Toads are known for their warty skin and hopping abilities.",
+            "They are primarily nocturnal and are often found near water sources.",
+            "Toads have a varied diet that includes insects, worms, and other small invertebrates."
+          ],
+          lifeSpan: "They have a life span of around 10-12 years in the wild.",
+          about: "Toads are small amphibians known for their warty skin and nocturnal habits.",
+          Size: "2-4 inches in length",
+          Weight: "0.2-0.5 lbs"
+        },
+          {
+          id: 65,
+          name: "Alligator",
+          scientificName: "Alligator mississippiensis",
+          category: "Reptile",
+          habitat: "Freshwater rivers, lakes, and swamps in the southeastern United States",
+          icon: "🐊",
+          conservation: "Least Concern",
+          diet: "Carnivorous: fish, birds, and small mammals",
+          funFacts: [
+            "Alligators are known for their powerful jaws and armored bodies.",
+            "They are primarily aquatic and are often found in freshwater habitats.",
+            "Alligators can live for several decades in the wild."
+          ],
+          lifeSpan: "They have a life span of around 35-50 years in the wild.",
+          about: "Alligators are large reptiles known for their strength, aquatic habits, and distinctive appearance.",
+          Size: "10-15 feet in length",
+          Weight: "500-1000 lbs"
+        },
+          {
+          id: 66,
+          name: "Duck",
+          scientificName: "Anas platyrhynchos",
+          category: "Bird",
+          habitat: "Freshwater lakes, rivers, and ponds",
+          icon: "🦆",
+          conservation: "Least Concern",
+          diet: "Omnivorous: aquatic plants, insects, and small fish",
+          funFacts: [
+            "Ducks are known for their distinctive quacking and webbed feet.",
+            "They are highly adaptable and can be found in a variety of freshwater habitats.",
+            "Ducks have a diverse diet that includes plants, insects, and small aquatic animals."
+          ],
+          lifeSpan: "They have a life span of around 5-10 years in the wild.",
+          about: "Ducks are medium-sized birds known for their adaptability, webbed feet, and distinctive calls.",
+          Size: "20-26 inches in length",
+          Weight: "1-3 lbs"
+        },
+          {
+          id: 67,
+          name: "Swan",
+          scientificName: "Cygnus olor",
+          category: "Bird",
+          habitat: "Freshwater lakes, rivers, and ponds",
+          icon: "🦢",
+          conservation: "Least Concern",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Swans are known for their graceful appearance and long necks.",
+            "They are highly social and often form strong pair bonds.",
+            "Swans are primarily herbivorous and feed on aquatic vegetation."
+          ],
+          lifeSpan: "They have a life span of around 10-20 years in the wild.",
+          about: "Swans are large waterfowl known for their elegance, strong pair bonds, and aquatic habits.",
+          Size: "16-28 inches in length",
+          Weight: "8-30 lbs"
+        },
+        {
+          id: 68,
+          name: "Crow",
+          scientificName: "Corvus brachyrhynchos",
+          category: "Bird",
+          habitat: "Forests, fields, and urban areas in North America",
+          icon: "🐦‍⬛",
+          conservation: "Least Concern",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Crows are known for their intelligence and problem-solving abilities.",
+            "They are highly social and often form large flocks.",
+            "Crows have a diverse diet that includes insects, fruits, and small animals."
+          ],
+          lifeSpan: "They have a life span of around 7-8 years in the wild.",
+          about: "Crows are medium-sized birds known for their intelligence, adaptability, and social behavior.",
+          Size: "16-20 inches in length",
+          Weight: "1-1.5 lbs"
+        },
+          {
+          id: 69,
+          name: "Stingray",
+          scientificName: "Dasyatis pastinaca",
+          category: "Fish",
+          habitat: "Coastal waters and estuaries",
+          icon: "🪼",
+          conservation: "Least Concern",
+          diet: "Carnivorous: small fish and invertebrates",
+          funFacts: [
+            "Stingrays have flattened bodies and long, whip-like tails.",
+            "They are generally peaceful but can defend themselves with venomous barbs.",
+            "Stingrays use their electroreceptors to detect prey in the sand."
+          ],
+          lifeSpan: "They have a life span of around 15-25 years in the wild.",
+          about: "Stingrays are cartilaginous fish known for their flattened bodies, long tails, and bottom-dwelling habits.",
+          Size: "3-6 feet in length",
+          Weight: "15-200 lbs"
+        },
+          {
+          id:70,
+          name: "Rat",
+          scientificName: "Rattus rattus",
+          category: "Mammal",
+          habitat: "Forests, marshes, and urban areas in North America",
+          icon: "🐀",
+          conservation: "Least Concern",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Rats are known for their intelligence and adaptability.",
+            "They are highly social and can thrive in various environments.",
+            "Rats are primarily nocturnal and are skilled foragers."
+          ],
+          lifeSpan: "They have a life span of around 2-3 years in the wild.",
+          about: "Rats are medium-sized rodents known for their intelligence, adaptability, and social behavior.",
+          Size: "6-9 inches in length",
+          Weight: "0.5-1 lb"
+        },
+          {
+          id: 71,
+          name: "Moose",
+          scientificName: "Alces alces",
+          category: "Mammal",
+          habitat: "Boreal and temperate forests in North America and Europe",
+          icon: "🫎",
+          conservation: "Least Concern",
+          diet: "Herbivorous: primarily leaves, twigs, and bark",
+          funFacts: [
+            "Moose are the largest members of the deer family.",
+            "They have long legs adapted for walking in deep snow and marshy areas.",
+            "Moose have a keen sense of smell and hearing, which helps them detect predators."
+          ],
+          lifeSpan: "They have a life span of around 15-25 years in the wild.",
+          about: "Moose are large herbivorous mammals known for their long legs, broad antlers, and solitary nature.",
+          Size: "6-8 feet in length",
+          Weight: "800-1,600 lbs"
+        },
+          {
+          id: 72,
+          name: "Cow",
+          scientificName: "Bos taurus",
+          category: "Mammal",
+          habitat: "Grasslands, farms, and rural areas worldwide",
+          icon: "🐄", 
+          conservation: "Least Concern",
+          diet: "Herbivorous: primarily grasses and other vegetation",
+          funFacts: [
+            "Cows are domesticated animals commonly raised for milk, meat, and leather.",
+            "They have a complex digestive system with four stomach compartments.",
+            "Cows are social animals and often form strong bonds with other members of the herd."
+          ],
+          lifeSpan: "They have a life span of around 15-20 years in the wild.",
+          about: "Cows are large domesticated mammals known for their role in agriculture and their distinctive appearance.",
+          Size: "4.5-5.5 feet in length",
+          Weight: "1,000-1,800 lbs"
+        },
+          {
+          id: 73,
+          name: "Llama",
+          scientificName: "Lama glama",
+          category: "Mammal",
+          habitat: "Grasslands and mountainous regions in South America",
+          icon: "🦙",
+          conservation: "Least Concern",
+          diet: "Herbivorous: primarily grasses and other vegetation",
+          funFacts: [
+            "Llamas are domesticated animals commonly used as pack animals and for their wool.",
+            "They are social animals and often live in herds.",
+            "Llamas have a gentle temperament and can communicate through a variety of vocalizations."
+          ],
+          lifeSpan: "They have a life span of around 15-20 years in the wild.",
+          about: "Llamas are large domesticated mammals known for their role in agriculture and their distinctive appearance.",
+          Size: "5.5-6 feet in length",
+          Weight: "250-450 lbs"
+        },
+          {
+          id: 74,
+          name: "Sheep",
+          scientificName: "Ovis aries",
+          category: "Mammal",
+          habitat: "Grasslands, farms, and mountainous regions worldwide",
+          icon: "🐑",
+          conservation: "Least Concern",
+          diet: "Herbivorous: primarily grasses and other vegetation",
+          funFacts: [
+            "Sheep are domesticated animals commonly raised for their wool, meat, and milk.",
+            "They are social animals and often form flocks.",
+            "Sheep have a strong flocking instinct and rely on group behavior for protection."
+          ],
+          lifeSpan: "They have a life span of around 10-12 years in the wild.",
+          about: "Sheep are medium-sized domesticated mammals known for their wool and agricultural importance.",
+          Size: "4-5 feet in length",
+          Weight: "100-350 lbs"
+        },
+          {
+          id: 75,
+          name: "Chimpanzee",
+          scientificName: "Pan troglodytes",
+          category: "Mammal",
+          habitat: "Tropical forests and savannas in Africa",
+          icon: "🦧",
+          conservation: "Least Concern",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Chimpanzees are highly intelligent primates known for their complex social structures.",
+            "They use tools for foraging and have been observed exhibiting problem-solving skills.",
+            "Chimpanzees communicate through vocalizations, facial expressions, and gestures."
+          ],
+          lifeSpan: "They have a life span of around 40-50 years in the wild.",
+          about: "Chimpanzees are large primates known for their intelligence, social behavior, and close genetic relationship to humans.",
+          Size: "3-4 feet in length",
+          Weight: "70-130 lbs"
+        },
+          {
+          id: 76,
+          name: "Rhinoceros",
+          scientificName: "Rhinocerotidae",
+          category: "Mammal",
+          habitat: "Grasslands and savannas in Africa and Asia",
+          icon: "🦏",
+          conservation: "Critically endangered",
+          diet: "Herbivorous: primarily grasses and leaves",
+          funFacts: [
+            "Rhinoceroses have thick skin and one or two horns on their snouts.",
+            "They are generally solitary animals and have poor eyesight but a strong sense of smell.",
+            "Rhinoceroses are threatened by poaching for their horns."
+          ],
+          lifeSpan: "They have a life span of around 35-50 years in the wild.",
+          about: "Rhinoceroses are large herbivorous mammals known for their distinctive horns and thick skin.",
+          Size: "10-12 feet in length",
+          Weight: "1,800-5,100 lbs"
+        },
+          {
+          id: 77,
+          name: "Bison",
+          scientificName: "Bison bison",
+          category: "Mammal",
+          habitat: "Grasslands and plains in North America",
+          icon: "🦬",
+          conservation: "Least Concern",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Bison are large, herbivorous mammals known for their humped shoulders and massive heads.",
+            "They are social animals that typically form herds.",
+            "Bison played a crucial role in the ecosystems of North American grasslands."
+          ],
+          lifeSpan: "They have a life span of around 15-20 years in the wild.",
+          about: "Bison are large, powerful mammals that are an iconic species of the North American plains.",
+          Size: "6-12 feet in length",
+          Weight: "900-2,200 lbs"
+        },
+          {
+          id: 78,
+          name: "Squirrel",
+          scientificName: "Sciuridae",
+          category: "Mammal",
+          habitat: "Forests, parks, and urban areas in North America",
+          icon: "🐿️",
+          conservation: "Least Concern",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Squirrels are known for their bushy tails and strong hind legs.",
+            "They are highly adaptable and can thrive in urban environments.",
+            "Squirrels are primarily diurnal and are skilled foragers."
+          ],
+          lifeSpan: "They have a life span of around 6-12 years in the wild.",
+          about: "Squirrels are small to medium-sized rodents known for their agility, adaptability, and bushy tails.",
+          Size: "16-28 inches in length",
+          Weight: "1-1.5 lbs"
+        },
+          {
+          id: 79,
+          name: "Otter",
+          scientificName: "Lutrinae",
+          category: "Mammal",
+          habitat: "Rivers, lakes, and coastal areas in North America",
+          icon: "🦦",
+          conservation: "Least Concern",
+          diet: "Carnivorous: fish, crustaceans, and small aquatic animals",
+          funFacts: [
+            "Otters are known for their playful behavior and strong swimming abilities.",
+            "They are highly social and often live in family groups.",
+            "Otters are primarily diurnal and are skilled hunters."
+          ],
+          lifeSpan: "They have a life span of around 8-9 years in the wild.",
+          about: "Otters are medium-sized mammals known for their playful nature, agility in water, and social behavior.",
+          Size: "20-28 inches in length",
+          Weight: "10-30 lbs"
+        },
+          {
+          id: 80,
+          name: "Bat",
+          scientificName: "Chiroptera",
+          category: "Mammal",
+          habitat: "Caves, forests, and urban areas worldwide",
+          icon: "🦇",
+          conservation: "Least Concern",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Bats are known for their ability to navigate using echolocation.",
+            "They are highly adaptable and can thrive in various environments.",
+            "Bats are primarily nocturnal and are skilled hunters."
+          ],
+          lifeSpan: "They have a life span of around 2-3 years in the wild.",
+          about: "Bats are small to medium-sized mammals known for their nocturnal behavior, echolocation abilities, and diverse diets.",
+          Size: "3-7 inches in length",
+          Weight: "0.5-1.5 lbs"
+        },
+          {
+          id:81,
+          name: "Hamster",
+          scientificName: "Cricetinae",
+          category: "Mammal",
+          habitat: "Grasslands, forests, and human settlements worldwide",
+          icon: "🐹",
+          conservation: "Common",
+          diet: "Omnivorous: seeds, fruits, and insects",
+          funFacts: [
+            "Hamsters are known for their cheek pouches, which they use to store food.",
+            "They are nocturnal and are most active during the night.",
+            "Hamsters have a keen sense of smell and hearing."
+          ],
+          lifeSpan: "They have a life span of around 2-3 years in the wild.",
+          about: "Hamsters are small rodents known for their nocturnal behavior, cheek pouches, and adaptability as pets.",
+          Size: "2-4 inches in length",
+          Weight: "0.5-1 lbs"
+        },
+          {
+          id: 82,
+          name: "Peacock",
+          scientificName: "Pavo cristatus",
+          category: "Bird",
+          habitat: "Forests and open areas in South Asia",
+          icon: "🦚",
+          conservation: "Least Concern",
+          diet: "Omnivorous: seeds, insects, and small animals",
+          funFacts: [
+            "Peacocks are known for their vibrant plumage and elaborate courtship displays.",
+            "They are primarily ground-dwelling birds but can fly short distances.",
+            "Peacocks are omnivorous and feed on seeds, insects, and small animals."
+          ],
+          lifeSpan: "They have a life span of around 15-20 years in the wild.",
+          about: "Peacocks are large, colorful birds known for their striking plumage, courtship displays, and omnivorous diet.",
+          Size: "3-4 feet in length",
+          Weight: "8-13 lbs"
+        },
+          {
+          id: 83,
+          name: "Skunk",
+          scientificName: "Mephitis mephitis",
+          category: "Mammal",
+          habitat: "Deserts and grasslands in southern Africa",
+          icon: "🦨",
+          conservation: "Least Concern",
+          diet: "Omnivorous: insects, small vertebrates, and plants",
+          funFacts: [
+            "Skunks are known for their distinctive black and white coloration.",
+            "They can spray a foul-smelling liquid as a defense mechanism.",
+            "Skunks are primarily nocturnal and have a keen sense of smell."
+          ],
+          lifeSpan: "They have a life span of around 7-10 years in the wild.",
+          about: "Skunks are small to medium-sized mammals known for their striking coloration, nocturnal habits, and defensive spray.",
+          Size: "They are about 9-10 inches in length",
+          Weight: "They are about 4-10 lbs"
+        },
+          {
+          id: 84,
+          name: "Okapi",
+          scientificName: "Okapia johnstoni",
+          category: "Mammal",
+          habitat: "Dense rainforests in Central Africa",
+          icon: "🦓",
+          conservation: "Endangered",
+          diet: "Herbivorous: grasses, aquatic plants, and fruits",
+          funFacts: [
+            "Okapis are closely related to giraffes and have similar body structures.",
+            "They are solitary and elusive animals found in dense rainforests.",
+            "Okapis have striking striped markings on their legs, which help with camouflage."
+          ],
+          lifeSpan: "They have a life span of around 20 years in the wild.",
+          about: "Okapis are forest-dwelling mammals known for their elusive nature, striped leg markings, and close relation to giraffes.",
+          Size: "4.9-6.6 feet in length",
+          Weight: "440-770 lbs"
+        },
+          {
+          id: 85,
+          name: "Ocelot",
+          scientificName: "Leopardus pardalis",
+          category: "Mammal",
+          habitat: "Tropical and subtropical forests in Central and South America",
+          icon: "🐆",
+          conservation: "Least Concern",
+          diet: "Carnivorous: small mammals, birds, and reptiles",
+          funFacts: [
+            "Ocelots are nocturnal and solitary cats.",
+            "They have distinctive spotted coats that provide camouflage in their forest habitats.",
+            "Ocelots are skilled hunters, preying on small mammals, birds, and reptiles."
+          ],
+          lifeSpan: "They have a life span of around 7-10 years in the wild.",
+          about: "Ocelots are medium-sized wild cats known for their striking coat patterns, nocturnal behavior, and hunting skills.",
+          Size: "20-40 inches in length",
+          Weight: "18-40 lbs"
+        },
+          {
+          id: 86,
+          name: "Coral",
+          scientificName: "Anthozoa",
+          category: "Cnidarian",
+          habitat: "Marine environments, often forming coral reefs",
+          icon: "🪸",
+          conservation: "Varies by species",
+          diet: "Carnivorous: plankton and small marine organisms",
+          funFacts: [
+            "Corals are marine invertebrates that often form large reef structures.",
+            "They have a symbiotic relationship with photosynthetic algae called zooxanthellae.",
+            "Coral reefs provide habitat for a diverse range of marine life."
+          ],
+          lifeSpan: "They can live for several decades, with some species living over 100 years.",
+          about: "Corals are marine invertebrates known for their reef-building capabilities and symbiotic relationship with algae.",
+          Size: "Varies by species",
+          Weight: "Varies by species"
+        },
+          {
+          id: 87,
+          name: "Ladybug",
+          scientificName: "Coccinellidae",
+          category: "Insect",
+          habitat: "Gardens, forests, and grasslands",
+          icon: "🐞",
+          conservation: "Least Concern",
+          diet: "Carnivorous: primarily aphids and other small insects",
+          funFacts: [
+            "Ladybugs are beneficial insects known for their role in controlling aphid populations.",
+            "They have distinctive red and black spotted elytra (wing covers).",
+            "Ladybugs can secrete a yellow fluid from their legs as a defense mechanism."
+          ],
+          lifeSpan: "They have a life span of around 1 year in the wild.",
+          about: "Ladybugs are small beetles known for their bright coloration and beneficial role in gardens.",
+          Size: "0.3-0.4 inches in length",
+          Weight: "0.01-0.02 lbs"
+        },
+          {
+          id: 88,
+          name: "Python",
+          scientificName: "Pythonidae",
+          category: "Reptile",
+          habitat: "Tropical and subtropical regions",
+          icon: "🐍",
+          conservation: "Varies by species",
+          diet: "Carnivorous: primarily small mammals and birds",
+          funFacts: [
+            "Pythons are non-venomous snakes known for their constriction method of subduing prey.",
+            "They can grow to impressive lengths, with some species exceeding 20 feet.",
+            "Pythons are found in a variety of habitats, including forests, grasslands, and swamps."
+          ],
+          lifeSpan: "They can live for 20-30 years in captivity.",
+          about: "Pythons are large, non-venomous snakes known for their impressive size and constriction hunting method.",
+          Size: "Varies by species, up to 20+ feet in length",
+          Weight: "Varies by species, up to 200 lbs"
+        },
+          {
+          id: 89,
+          name: "Flying Squirrel",
+          scientificName: "Pteromyini",
+          category: "Mammal",
+          habitat: "Forests in North America and Eurasia",
+          icon: "🐿️",
+          conservation: "Least Concern",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Flying squirrels are known for their ability to glide between trees using a membrane called the patagium.",
+            "They are primarily nocturnal and have large eyes adapted for night vision.",
+            "Flying squirrels are social animals and often nest in groups." 
+          ],
+          lifeSpan: "They can live for around 5-6 years in the wild.",
+          about: "Flying squirrels are small, nocturnal mammals known for their gliding ability and social behavior.",
+          Size: "8-10 inches in length",
+          Weight: "3-6 oz"
+        },
+          {
+          id: 90,
+          name: "Kakapo",
+          scientificName: "Strigops habroptilus",
+          category: "Bird",
+          habitat: "Forests in New Zealand",
+          icon: "🦜",
+          conservation: "Critically Endangered",
+          diet: "Herbivorous: fruits, nuts, seeds, and plants",
+          funFacts: [
+            "Kakapos are large, nocturnal, flightless parrots native to New Zealand.",
+            "They are critically endangered, with only a few dozen individuals remaining.",
+            "Kakapos have a distinctive owl-like face and a strong sense of smell."
+          ],
+          lifeSpan: "They can live for 60-90 years in the wild.",
+          about: "Kakapos are large, nocturnal, flightless parrots known for their distinctive appearance and critically endangered status.",
+          Size: "24-40 inches in length",
+          Weight: "4-9 lbs"
+        },
+        {
+          id: 91,
+          name: "Sugar Glider",
+          name: "Sugar Glider",
+          scientificName: "Petaurus breviceps",
+          category: "Mammal",
+          habitat: "Forests, woodlands, and urban areas in Australia and New Guinea",
+          icon: "🐿️",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Sugar gliders are small, nocturnal gliding possums native to Australia and New Guinea.",
+            "They have a membrane called the patagium that allows them to glide between trees.",
+            "Sugar gliders are social animals and often live in groups."
+          ],
+          lifeSpan: "They can live for around 9-12 years in the wild.",
+          about: "Sugar gliders are small, nocturnal gliding possums known for their social behavior and gliding ability.",
+          Size: "6-8 inches in length",
+          Weight: "3-5 oz"
+        },
+          {
+          id: 92,
+          name: "Hedgehog",
+          scientificName: "Erinaceus europaeus",
+          category: "Mammal",
+          habitat: "Forests, grasslands, and gardens in Europe",
+          icon: "🦔",
+          conservation: "Least Concern",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Hedgehogs are small, nocturnal mammals covered in spines.",
+            "They are known for their ability to roll into a tight ball for protection.",
+            "Hedgehogs are primarily insectivorous but will also eat small vertebrates and plants."
+          ],
+          lifeSpan: "They can live for around 3-7 years in the wild.",
+          about: "Hedgehogs are small, nocturnal mammals known for their spiny protection and insectivorous diet.",
+          Size: "6-12 inches in length",
+          Weight: "0.5-1.5 lbs"
+        },  {
+          id: 93,
+          name: "Lovebird",
+          scientificName: "Agapornis",
+          category: "Bird",
+          habitat: "Forests, savannas, and woodlands in Africa",
+          icon: "🦜",
+          conservation: "Least Concern",
+          diet: "Herbivorous: primarily seeds, fruits, and vegetables",
+          funFacts: [
+            "Lovebirds are small, colorful parrots known for their strong pair bonds.",
+            "They are social birds that thrive in the company of their mates.",
+            "Lovebirds communicate through a variety of vocalizations and body language."
+          ],
+          lifeSpan: "They can live for around 10-15 years in captivity.",
+          about: "Lovebirds are small, social parrots known for their affectionate behavior and vibrant plumage.",
+          Size: "5-7 inches in length",
+          Weight: "40-60 g"
+        },
+          {
+          id: 94,
+          name: "Alpaca",
+          scientificName: "Vicugna pacos",
+          category: "Mammal",
+          habitat: "Grasslands and mountainous regions in South America",
+          icon: "🦙",
+          conservation: "Least Concern",
+          diet: "Herbivorous: primarily grasses and hay",
+          funFacts: [
+            "Alpacas are domesticated animals known for their soft wool.",
+            "They are social animals that live in herds.",
+            "Alpacas communicate through body language and a variety of vocalizations."
+          ],
+          lifeSpan: "They can live for around 15-20 years.",
+          about: "Alpacas are domesticated South American camelids known for their gentle nature and luxurious fleece.",
+          Size: "32-39 inches in height",
+          Weight: "100-200 lbs"
+        },
+          {
+          id: 95,
+          name: "Fennec fox",
+          scientificName: "Vulpes zerda",
+          category: "Mammal",
+          habitat: "Deserts of North Africa",
+          icon: "🦊",
+          conservation: "Least Concern",
+          diet: "Omnivorous: fruits, nuts, insects, and small animals",
+          funFacts: [
+            "Fennec foxes are known for their large ears, which help dissipate heat.",
+            "They are nocturnal and have excellent hearing.",
+            "Fennec foxes are the smallest species of fox."
+          ],
+          lifeSpan: "They can live for around 10-14 years in captivity.",
+          about: "Fennec foxes are small nocturnal foxes with distinctive large ears, adapted to desert life.",
+          Size: "9-16 inches in length",
+          Weight: "1.5-3.5 lbs"
+        },
+          {
+          id: 96,
+          name: "Lizard",
+          scientificName: "Lacertilia",
+          category: "Reptile",
+          habitat: "Various terrestrial habitats worldwide",
+          icon: "🦎",
+          conservation: "Varies by species",
+          diet: "Carnivorous: primarily insects and small animals",
+          funFacts: [
+            "Lizards are a diverse group of reptiles found in various habitats around the world.",
+            "They have scaly skin and typically four legs.",
+            "Lizards are ectothermic, relying on external heat sources to regulate their body temperature."
+          ],
+          lifeSpan: "They can live for around 5-20 years depending on the species.",
+          about: "Lizards are reptiles known for their scaly skin, diverse habitats, and varied diets.",
+          Size: "3-24 inches in length",
+          Weight: "0.1-5 lbs"
+        },
+          {
+          id: 97,
+          name: "Tortoise",
+          scientificName: "Testudinidae",
+          category: "Reptile",
+          habitat: "Various terrestrial habitats worldwide",
+          icon: "🐢",
+          conservation: "Varies by species",
+          diet: "Herbivorous: primarily grasses, leaves, and fruits",
+          funFacts: [
+            "Tortoises are known for their long lifespans, with some species living over 100 years.",
+            "They have sturdy, dome-shaped shells for protection.",
+            "Tortoises are slow-moving and primarily terrestrial."
+          ],
+          lifeSpan: "They can live for around 50-150 years depending on the species.",
+          about: "Tortoises are land-dwelling reptiles known for their hard shells, slow movements, and herbivorous diet.",
+          Size: "1-4 feet in length",
+          Weight: "5-500 lbs"
+        },
+          {
+          id: 98,
+          name: "Eel",
+          scientificName: "Anguillidae",
+          category: "Fish",
+          habitat: "Freshwater rivers and lakes, and some coastal areas",
+          icon: "🐍",
+          conservation: "Varies by species",
+          diet: "Carnivorous: primarily small fish and invertebrates",
+          funFacts: [
+            "Eels have elongated, snake-like bodies and are excellent swimmers.",
+            "They are mostly nocturnal and hide in crevices during the day.",
+            "Some eel species migrate long distances to spawn."
+          ],
+          lifeSpan: "They can live for around 8-20 years depending on the species.",
+          about: "Eels are elongated fish known for their slippery bodies, nocturnal habits, and diverse habitats.",
+          Size: "1-4 feet in length",
+          Weight: "0.5-5 lbs"
+        },
+          {
+          id: 99,
+          name: "Shrimp",
+          scientificName: "Caridea",
+          category: "Crustacean",
+          habitat: "Marine and freshwater environments worldwide",
+          icon: "🦐",
+          conservation: "Varies by species",
+          diet: "Omnivorous: primarily plankton, algae, and small organisms",
+          funFacts: [
+            "Shrimp are small, aquatic crustaceans with elongated bodies and a flexible exoskeleton.",
+            "They are found in both marine and freshwater environments worldwide.",
+            "Shrimp play an important role in the food chain and are a popular seafood choice."
+          ],
+          lifeSpan: "They can live for around 1-6 years depending on the species.",
+          about: "Shrimp are small crustaceans known for their elongated bodies, flexible exoskeleton, and important ecological role.",
+          Size: "1-3 inches in length",
+          Weight: "0.01-0.1 lbs"
+        },
+          {
+          id: 100,
+          name: "Catapiller",
+          scientificName: "Lepidoptera",
+          category: "Insect",
+          habitat: "Various habitats including gardens, forests, and meadows worldwide",
+          icon: "🐛",
+          conservation: "Varies by species",
+          diet: "Leaves and plant matter",
+          funFacts: [
+            "Caterpillars are the larval stage of butterflies and moths.",
+            "They are primarily found in gardens, forests, and meadows worldwide.",
+            "Caterpillars have a herbivorous diet, mainly feeding on leaves and plant matter."
+          ],
+          lifeSpan: "They can live for around 2-5 weeks depending on the species.",
+          about: "Caterpillars are the larval stage of butterflies and moths, known for their voracious appetite and metamorphic life cycle.",
+          Size: "0.5-4 inches in length",
+          Weight: "0.001-0.01 lbs"
+        },
+      ];
+
+      
+
+      const searchInput =document.getElementById("searchInput");
+      const animalList = document.getElementById("animalList");
+      const resultsTitle = document.getElementById("resultsTitle");
+      const animalDetail = document.getElementById("animalDetail");
+      const filterButtons = document.querySelectorAll(".filter");
+      const listPage = document.getElementById("listPage");
+      const detailPage = document.getElementById("detailPage");
+      const splashPage = document.getElementById("splashPage");
+      const homePage = document.getElementById("homePage");
+      const featurePage = document.getElementById("featurePage");
+      const featureContent = document.getElementById("featureContent");
+      const backBtn = document.getElementById("backBtn");
+      const favoriteIds = new Set(
+        JSON.parse(localStorage.getItem("wildquest-favorites") || "[]")
+          .filter((id) => animals.some((animal) => animal.id === id))
+      );
+      const progressStorageKey = "wildquest-progress";
+      let savedProgress = {};
+      const savedProgressText = localStorage.getItem(progressStorageKey);
+      if (savedProgressText) {
+        try {
+          savedProgress = JSON.parse(savedProgressText);
+        } catch (error) {
+          console.error("Could not read saved WildQuest progress.", error);
+        }
+      }
+      if (!savedProgress || typeof savedProgress !== "object" || Array.isArray(savedProgress)) {
+        savedProgress = {};
+      }
+      const recentAnimalIds = Array.isArray(savedProgress.recentAnimalIds)
+        ? savedProgress.recentAnimalIds.filter((id) => animals.some((animal) => animal.id === id)).slice(0, 10)
+        : [];
+      const viewedAnimalIds = new Set(
+        Array.isArray(savedProgress.viewedAnimalIds)
+          ? savedProgress.viewedAnimalIds.filter((id) => animals.some((animal) => animal.id === id))
+          : []
+      );
+      let completedQuiz = savedProgress.completedQuiz === true;
+      let perfectQuizCount = Number.isInteger(savedProgress.perfectQuizCount) && savedProgress.perfectQuizCount >= 0
+        ? savedProgress.perfectQuizCount
+        : 0;
+      let solvedMysteryCount = Number.isInteger(savedProgress.solvedMysteryCount) && savedProgress.solvedMysteryCount >= 0
+        ? savedProgress.solvedMysteryCount
+        : savedProgress.solvedMystery === true ? 1 : 0;
+      const habitats = [
+        { name: "Oceans & reefs", icon: "🌊", description: "Explore animals at home in the sea.", ids: [3, 8, 11, 14, 16, 19, 20, 27, 32, 34, 35, 42, 48, 55, 69, 79, 86, 97, 98, 99] },
+        { name: "Forests & woodlands", icon: "🌳", description: "Meet wildlife among trees and forest canopies.", ids: [1, 2, 4, 5, 7, 9, 10, 13, 12, 18, 22, 23, 26, 28, 29, 30, 33, 36, 38, 39, 40, 45, 46, 47, 50, 51, 56, 57, 58, 59, 60, 71, 72, 75, 77, 78, 80, 82, 85, 89, 91, 92, 93, 94, 96, 100] },
+        { name: "Mountains", icon: "⛰️", description: "Discover animals adapted to high elevations.", ids: [2, 5, 6, 38, 45, 51, 50, 78, 89, 99, 93] },
+        { name: "Polar regions", icon: "❄️", description: "Find animals built for the coldest places on Earth.", ids: [8, 6, 31, 32, 34, 35, 38, 41, 42, 48, 51, 55, 61, 62, 69, 71, 79, 91, 93, 99] },
+        { name: "Grasslands & savannas", icon: "🌾", description: "Explore open habitats and their wildlife.", ids: [1, 4, 7, 10, 13, 17, 21, 22, 26, 28, 29, 33, 36, 40, 46, 50, 56, 60, 71, 75, 77, 80, 85, 89, 92, 96, 93] },
+        { name: "House", icon: "🏠", description: "Discover animals that live in human homes.", ids: [4, 9, 10, 11, 15, 25, 26, 29, 37, 39, 40, 45, 48, 49, 57, 59, 60, 64, 66, 70, 74, 78, 81, 83, 87, 89, 91, 92, 96, 97, 100] },
+        { name: "Beach", icon: "🏖️", description: "Discover animals that live along sandy shores and coastal areas.", ids: [3, 11, 16, 20, 27, 34, 48, 55, 86, 99] }
+      ];
+      const quizQuestions = [
+        { question: "Which animal is the largest land animal?", options: ["African Elephant", "Giant Panda", "Red Fox"], answer: "African Elephant" },
+        { question: "What is the main food of a giant panda?", options: ["Bamboo", "Fish", "Grass"], answer: "Bamboo" },
+        { question: "Which bird is known as the national bird of the United States?", options: ["Emperor Penguin", "Bald Eagle", "Clownfish"], answer: "Bald Eagle" },
+        { question: "Where does the Emperor Penguin live?", options: ["Antarctic", "Central China", "North America"], answer: "Antarctic" },
+        { question: "Which animal is known as the king of the jungle?", options: ["Lion", "Tiger", "Elephant"], answer: "Lion" },
+        { question: "Which animal is known for its black and white stripes?", options: ["Zebra", "Tiger", "Panda"], answer: "Zebra" },
+        { question: "Which animal is known for its long neck?", options: ["Giraffe", "Elephant", "Kangaroo"], answer: "Giraffe" },
+        { question: "How many hearts does an octopus have?", options: ["1", "2", "3"], answer: "3" },
+        { question: "Which animal is known for copying the sounds it hears?", options: ["Parrot", "Dolphin", "Elephant"], answer: "Parrot" },
+        { question: "How many legs does a frog have?", options: ["4", "6", "8"], answer: "4" },
+        { question: "What is the fastest swimming animal?", options: ["Sailfish", "Dolphin", "Shark"], answer: "Sailfish" },
+        { question: "Which animal is known to for having a great memory?", options: ["Elephant", "Dolphin", "Crow"], answer: "Elephant" },
+        { question: "What is a baby shark called?", options: ["Pup", "Fry", "Cub"], answer: "Pup" },
+        { question: "How many legs does a spider have?", options: ["6", "8", "10"], answer: "8" },
+        { question: "Which animal is known for its ability to change color?", options: ["Chameleon", "Octopus", "Cuttlefish"], answer: "Chameleon" },
+        { question: "How many wings does a butterfly have?", options: ["2", "4", "6"], answer: "4" },
+        { question: "How many legs does an insect have?", options: ["6", "8", "10"], answer: "6" },
+        { question: "How many legs does a crab have?", options: ["6", "8", "10"], answer: "10" },
+        { question: "How many legs does a scorpion have?", options: ["6", "8", "10"], answer: "8" },
+        { question: "What do honeybees produce that humans consume?", options: ["Milk", "Honey", "Wax"], answer: "Honey" },
+        { question: "Which animal is known for its ability to regenerate lost body parts?", options: ["Starfish", "Lizard", "Crab"], answer: "Starfish" },
+        { question:"Which animal is known for its ability to survive in extremely cold environments?", options: ["Polar Bear", "Penguin", "Arctic Fox"], answer: "Polar Bear" },
+        { question: "Which animal is known for its ability to survive in the desert?", options: ["Camel", "Fennec Fox", "Meerkat"], answer: "Camel" },
+        { question: "Out of which part does a scorpion sting come from?", options: ["Tail", "Claw", "Leg"], answer: "Tail" },
+        { question: "Which animal is known for its ability to survive without food for long periods?", options: ["Camel", "Fennec Fox", "Kangaroo Rat"], answer: "Camel" },
+        { question: "Which animal is known for its ability to survive in both water and on land?", options: ["Frog", "Crocodile", "Turtle"], answer: "Frog" },
+        { question: "Which animal is known for its ability to jump long distances?", options: ["Frog", "Kangaroo", "Grasshopper"], answer: "Kangaroo" },
+        { question: "Which animal is known for its ability to camouflage itself in its environment?", options: ["Chameleon", "Octopus", "Leaf Insect"], answer: "Chameleon" },
+        { question: "How many legs does an octopus have?", options: ["6", "8", "10"], answer: "8" },
+        { question: "How many legs does a centipede have?", options: ["6", "8", "100"], answer: "100" },
+        { question: "Which part does a monkey swing from?", options: ["Tail", "Arms", "Legs"], answer: "Arms" },
+        { question: "Which animal is known for its ability to echolocate?", options: ["Bat", "Dolphin", "Owl"], answer: "Bat" },
+        { question: "Which animal is known for its ability to survive extreme heat?", options: ["Camel", "Fennec Fox", "Meerkat"], answer: "Camel" },
+        { question: "How many legs does a horse have?", options: ["2", "4", "6"], answer: "4" },
+        { question: "Which animal is known for its ability to survive in the Arctic?", options: ["Polar Bear", "Penguin", "Arctic Fox"], answer: "Polar Bear" },
+        { question: "Which animal is known for its ability to survive in the rainforest?", options: ["Jaguar", "Sloth", "Toucan"], answer: "Jaguar" },
+        { question: "Which animal is known for its ability to survive in the savanna?", options: ["Lion", "Elephant", "Cheetah"], answer: "Lion" },
+        { question: "Which animal is known for its ability to survive in the mountains?", options: ["Mountain Goat", "Snow Leopard", "Eagle"], answer: "Mountain Goat" },
+        { question: "Which animal is known for its role as an apex predator in the ocean?", options: ["Shark", "Dolphin", "Octopus"], answer: "Shark" },
+        { question: "What animals is the most owned as pets?", options: ["Dog", "Cat", "Fish"], answer: "Dog" },
+        { question: "How many legs does a quokka have?", options: ["2", "4", "6"], answer: "4" },
+        { question: "Which animal is known for its friendly and photogenic nature?", options: ["Dog", "Koala", "Kangaroo"], answer: "Koala" },
+      ];
+      const detectiveLevels = [
+       {mysteryId: 3,
+          clues: [
+            "I live in tropical and subtropical oceans.",
+            "I eat seagrasses and algae.",
+            "I migrate long distances between feeding and nesting sites."
+          ],
+          choices: [1, 3, 9],
+          success: "Case solved! It's the Green Sea Turtle. 🐢"
+       },
+       {mysteryId: 17,
+          clues: [
+            "I am the king of the savanna.",
+            "I eat meat and hunt other animals.",
+            "I live in prides and have a majestic mane."
+          ],
+          choices: [14, 17, 20],
+          success: "Case solved! It's the Lion 🦁"
+       },
+        {mysteryId: 8,
+          clues: [
+            "I am a large flightless bird.",
+            "I have a black and white plumage.",
+            "I am known for living in cold Antarctic regions."
+          ],
+          choices: [8, 29, 1],
+          success: "Case solved! It's the Emperor Penguin 🐧"
+        },
+        {mysteryId: 1,
+          clues: [
+            "I am the largest land animal.",
+            "I have large ears and a long trunk.",
+            "I am known for my intelligence and strong social bonds."
+          ],
+          choices: [1, 26, 6],
+          success: "Case solved! It's the African Elephant 🐘"
+        },
+        {mysteryId: 2,
+          clues: [
+            "I have a white head and tail.",
+            "I have a brown body.",
+            "I am known for my keen eyesight and hunting skills."
+          ],
+          choices: [2, 22, 25],
+          success: "Case solved! It's the Bald Eagle 🦅"
+        },
+        {mysteryId: 4,
+          clues: [
+            "I am a venomous.",
+            "I have a hood that I can expand.",
+            "I am known for my potent venom and distinctive appearance."
+          ],
+          choices: [4, 7, 33],
+          success: "Case solved! It's a Snake 🐍"
+        },
+        {mysteryId: 5,
+          clues: [
+            "I have distinctive black and white markings.",
+            "I primarily eat bamboo.",
+            "I am known for my gentle nature and conservation status."
+          ],
+          choices: [2, 5, 9],
+          success: "Case solved! It's the Giant Panda 🐼"
+        },
+        {mysteryId: 6,
+          clues: [
+            "I have a thick fur coat with a smoky-gray color.",
+            "I have a long, bushy tail.",
+            "I am known for my stealth and ability to adapt to mountainous habitats."
+          ],
+          choices: [9, 6, 16],
+          success: "Case solved! It's the Snow Leopard 🐆"
+        },
+        {mysteryId: 7,
+          clues: [
+            "I have a reddish-brown coat.",
+            "I have a bushy tail.",
+            "I am known for my cunning and adaptability."
+          ],
+          choices: [7, 18, 28],
+          success: "Case solved! It's the Red Fox 🦊"
+        },
+        {mysteryId: 28,
+          clues: [
+            "I have a colorful plumage.",
+            "I have a curved beak.",
+            "I am known for my ability to mimic sounds and talk."
+          ],
+          choices: [13, 28, 9],
+          success: "Case solved! It's the Parrot 🦜"
+        },
+        {mysteryId: 78,
+    clues: [
+      "I am a mammal with a fluffy tail.",
+      "I can live in forests, fields, and even near people.",
+      "I am known for gathering and storing food for the winter."
+    ],
+    choices: [78, 25, 30,],
+    success: "Case solved! It's the squirrel 🐿️."
+  },
+  {
+    mysteryId: 8,
+    clues: [
+      "I am a bird, but I cannot fly well.",
+      "I live in Antarctica and huddle together to stay warm.",
+      "I am the largest penguin species."
+    ],
+    choices: [8, 28, 40,],
+    success: "Case solved! It's the Emperor Penguin 🐧."
+  },
+  {
+    mysteryId: 23,
+    clues: [
+      "I am the tallest land animal.",
+      "My neck is long enough to reach leaves high in the trees.",
+      "I have a patchy coat and live in Africa."
+    ],
+    choices: [23, 12, 29,],
+    success: "Case solved! It's the Giraffe 🦒."
+  },
+  {
+    mysteryId: 46,
+    clues: [
+      "I move very slowly and spend most of my time in trees.",
+      "I live in Central and South America.",
+      "I have algae growing in my fur and a low metabolism."
+    ],
+    choices: [46, 50, 52,],
+    success: "Case solved! It's the Sloth 🦥."
+  }
+      ];
+[];
+      
+      let selectedCategory = "All"; 
+      let currentQuizIndex = 0;
+      let quizScore = 0;
+      let quizRound = [];
+      let lastQuizFirstQuestion = null;
+      let quizQuestionAnswered = false;
+      let detectiveDeck = [];
+      let lastDetectiveLevel = null;
+      let detectiveGameEnded = false;
+
+      function showPage(page) {
+        [splashPage, homePage, listPage, detailPage, featurePage].forEach((element) => {
+          element.classList.add("hidden");
+        });
+        page.classList.remove("hidden");
+        window.scrollTo(0, 0);
+      }
+
+      function saveFavorites() {
+        localStorage.setItem("wildquest-favorites", JSON.stringify([...favoriteIds]));
+      }
+
+      function saveProgress() {
+        localStorage.setItem(progressStorageKey, JSON.stringify({
+          recentAnimalIds,
+          viewedAnimalIds: [...viewedAnimalIds],
+          completedQuiz,
+          perfectQuizCount,
+          solvedMystery: solvedMysteryCount >= 1,
+          solvedMysteryCount
+        }));
+      }
+
+      const achievements = [
+        { id: "first-discovery", icon: "🐾", title: "First Discovery", description: "View your first animal.", isUnlocked: () => viewedAnimalIds.size >= 1 },
+        { id: "wildlife-explorer", icon: "🧭", title: "Wildlife Explorer", description: "View 10 different animals.", isUnlocked: () => viewedAnimalIds.size >= 10 },
+        { id: "favorite-finder", icon: "💚", title: "Favorite Finder", description: "Save an animal to your favorites.", isUnlocked: () => favoriteIds.size >= 1 },
+        { id: "quiz-graduate", icon: "🎓", title: "Quiz Graduate", description: "Complete a full Quiz Challenge.", isUnlocked: () => completedQuiz },
+        { id: "mystery-solver", icon: "🔍", title: "Mystery Solver", description: "Solve an Animal Detective mystery.", isUnlocked: () => solvedMysteryCount >= 1 },
+        { id: "master-detective", icon: "🕵️‍♂️", title: "Master Detective", description: "Solve 5 Animal Detective mysteries.", isUnlocked: () => solvedMysteryCount >= 5 },
+        { id: "conservation-curious", icon: "📖", title: "Conservation Curious", description: "Read about 5 vulnerable animals.", isUnlocked: () => animals.filter((animal) => typeof animal.conservation === "string" && animal.conservation.toLowerCase() === "vulnerable" && viewedAnimalIds.has(animal.id)).length >= 5 },
+        { id: "quiz-master", icon: "🏆", title: "Quiz Master", description: "Complete 3 Quiz challenges with perfect scores.", isUnlocked: () => perfectQuizCount >= 3 },
+        { id: "habitat-explorer", icon: "🏞️", title: "Habitat Explorer", description: "Read about 10 animals from each habitat", isUnlocked: () => habitats.every((habitat) => habitat.ids.filter((id) => viewedAnimalIds.has(id)).length >= 10) },
+        { id: "favorite-collector", icon: "💎", title: "Favorite Collector", description: "Add 5 animals to your favorite list", isUnlocked: () => favoriteIds.size >= 5 },
+      ];
+
+      const featureGroups = {
+        explore: [
+          { feature: "find", icon: "🔎", title: "Find an animal", description: "Search and browse the animal collection." },
+          { feature: "habitats", icon: "🌿", title: "Explore habitats", description: "Discover wildlife by the places they live." },
+          { feature: "daily", icon: "☀️", title: "Animal of the day", description: "Meet a new featured animal each day." }
+        ],
+        play: [
+          { feature: "quiz", icon: "🧠", title: "Quiz Challenge", description: "Test your wildlife knowledge." },
+          { feature: "detective", icon: "🕵️", title: "Animal Detective", description: "Use clues to solve the mystery animal." }
+        ],
+        protect: [
+          { feature: "conservation", icon: "🌎", title: "Conservation", description: "Meet threatened animals and find simple ways to help." }
+        ],
+        favorites: [
+          { feature: "favorites", icon: "❤️", title: "Favorites", description: "See the animals you have saved." },
+          { feature: "recent", icon: "🕒", title: "Recently Viewed", description: "See the animals you have recently viewed." },
+          { feature: "achievements", icon: "🏆", title: "Achievements", description: "See the achievements you have unlocked." }
+        ]
+      };
+
+      const featureTitles = {
+        explore: "Explore",
+        play: "Play",
+        protect: "Protect",
+        favorites: "Favorites"
+      };
+
+      function renderFeatureSelection(group) {
+        const items = featureGroups[group] || [];
+        showPage(featurePage);
+        featureContent.innerHTML = `
+          <h2 class="section-title">${featureTitles[group] || "WildQuest"}</h2>
+          <p class="section-copy">Choose an option below.</p>
+          <div class="feature-grid selection-grid">
+            ${items.map((item) => `
+              <button class="feature-card" type="button" data-feature="${item.feature}">
+                <span class="feature-icon">${item.icon}</span>
+                <strong>${item.title}</strong>
+                <span>${item.description}</span>
+              </button>
+            `).join("")}
+          </div>
+        `;
+
+        featureContent.querySelectorAll("[data-feature]").forEach((button) => {
+          button.addEventListener("click", () => openFeature(button.dataset.feature));
+        });
+      }
+
+      function openFeature(feature) {
+        if (feature === "find") {
+          showPage(listPage);
+          renderAnimals();
+          return;
+        }
+
+        showPage(featurePage);
+        if (feature === "habitats") renderHabitats();
+        else if (feature === "daily") renderAnimalOfTheDay();
+        else if (feature === "quiz") startQuiz();
+        else if (feature === "detective") renderDetective();
+        else if (feature === "conservation") renderConservation();
+        else if (feature === "favorites") renderFavorites();
+        else if (feature === "recent") renderRecentlyViewed();
+        else if (feature === "achievements") renderAchievements();
+      }
+
+      function getFilteredAnimals() {
+        const searchText = searchInput.value.toLowerCase().trim();
+
+        return animals.filter((animal) => {
+          const searchTarget = [
+            animal.name,
+            animal.scientificName,
+            animal.habitat,
+            animal.category
+          ].join(" ").toLowerCase();
+
+          const matchesSearch = searchTarget.includes(searchText);
+          const matchesCategory =
+            selectedCategory === "All" || animal.category === selectedCategory;
+
+          return matchesSearch && matchesCategory;
+        });
+      }
+
+      function showAnimal(animalId) {
+        const animal = animals.find((entry) => entry.id === animalId);
+
+        if (!animal) {
+          animalDetail.innerHTML = "<h2>Animal not found</h2><p>Please choose another animal.</p>";
+          return;
+        }
+
+        const recentIndex = recentAnimalIds.indexOf(animal.id);
+        if (recentIndex !== -1) recentAnimalIds.splice(recentIndex, 1);
+        recentAnimalIds.unshift(animal.id);
+        recentAnimalIds.splice(10);
+        viewedAnimalIds.add(animal.id);
+        saveProgress();
+
+        animalDetail.innerHTML = `
+          <div class="detail-top">
+            <div class="detail-icon">${animal.icon}</div>
+            <div>
+              <h2>${animal.name}</h2>
+              <div class="detail-meta">${animal.scientificName}</div>
+            </div>
+          </div>
+
+          <div class="detail-tags">
+            <span class="tag">${animal.category}</span>
+            <span class="tag">${animal.habitat}</span>
+            <span class="tag">${animal.conservation}</span>
+          </div>
+
+          <div class="detail-body">
+            ${animal.about ? `<p>${animal.about}</p>` : ""}
+            <p><strong>Diet:</strong> ${animal.diet}</p>
+            <div class="detail-facts">
+              ${animal.Size ? `<div class="detail-fact"><strong>Size</strong>${animal.Size}</div>` : ""}
+              ${animal.Weight ? `<div class="detail-fact"><strong>Weight</strong>${animal.Weight}</div>` : ""}
+              ${animal.lifeSpan ? `<div class="detail-fact"><strong>Lifespan</strong>${animal.lifeSpan}</div>` : ""}
+            </div>
+            <ul>
+              ${animal.funFacts.map((fact) => `<li>${fact}</li>`).join("")}
+            </ul>
+          </div>
+          <div class="detail-actions">
+            <button class="favorite-toggle" type="button">${favoriteIds.has(animal.id) ? "♥ Saved to favorites" : "♡ Add to favorites"}</button>
+          </div>
+        `;
+
+        animalDetail.querySelector(".favorite-toggle").addEventListener("click", (event) => {
+          if (favoriteIds.has(animal.id)) favoriteIds.delete(animal.id);
+          else favoriteIds.add(animal.id);
+          saveFavorites();
+          event.currentTarget.textContent = favoriteIds.has(animal.id) ? "♥ Saved to favorites" : "♡ Add to favorites";
+        });
+        showPage(detailPage);
+      }
+
+      function renderHabitats() {
+        featureContent.innerHTML = `
+          <h2 class="section-title">Explore habitats</h2>
+          <p class="section-copy">Choose an environment to see animals that live there. Scroll down to see options.</p>
+          <div class="habitat-grid">
+            ${habitats.map((habitat, index) => `
+              <button class="habitat-card" type="button" data-habitat="${index}">
+                <span class="feature-icon">${habitat.icon}</span>
+                <h3>${habitat.name}</h3>
+                <p>${habitat.description}</p>
+              </button>
+            `).join("")}
+          </div>
+          <div id="habitatAnimals"></div>
+        `;
+        featureContent.querySelectorAll("[data-habitat]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const habitat = habitats[Number(button.dataset.habitat)];
+            const found = habitat.ids.map((id) => animals.find((animal) => animal.id === id)).filter(Boolean);
+            const target = document.getElementById("habitatAnimals");
+            target.innerHTML = `<h3 class="section-title">${habitat.name}</h3><div class="animal-grid">${found.map(animalCardMarkup).join("")}</div>`;
+            bindAnimalCards(target);
+          });
+        });
+        
+      }
+
+      function animalCardMarkup(animal) {
+        return `
+          <div class="animal-card" data-animal-id="${animal.id}" role="button" tabindex="0">
+            <div class="animal-image">${animal.icon}</div>
+            <div class="animal-info">
+              <div class="animal-name">${animal.name}</div>
+              <div class="scientific">${animal.scientificName}</div>
+              <div class="animal-tags">${animal.category} • ${animal.habitat}</div>
+            </div>
+            <div class="arrow">›</div>
+          </div>
+        `;
+      }
+
+      function bindAnimalCards(container) {
+        container.querySelectorAll("[data-animal-id]").forEach((card) => {
+          const open = () => showAnimal(Number(card.dataset.animalId));
+          card.addEventListener("click", open);
+          card.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              open();
+            }
+          });
+        });
+      }
+
+      function getDailyAnimalIndex() {
+        const localMidnight = new Date();
+        localMidnight.setHours(0, 0, 0, 0);
+        return Math.floor(localMidnight.getTime() / 86400000);
+      }
+
+      function renderAnimalOfTheDay() {
+        const animal = animals[getDailyAnimalIndex() % animals.length];
+
+        featureContent.innerHTML = `
+          <h2 class="section-title">Animal of the day</h2>
+          <p class="section-copy">Your daily wildlife discovery. Come back tomorrow to meet another animal.</p>
+
+          <section class="game-panel">
+            <div class="feature-animal">
+              <div class="animal-image">${animal.icon}</div>
+
+              <div>
+                <h3>${animal.name}</h3>
+                <div class="detail-meta">${animal.scientificName}</div>
+              </div>
+            </div>
+
+            <p><strong>Habitat:</strong> ${animal.habitat}</p>
+            <p><strong>Diet:</strong> ${animal.diet}</p>
+            <p><strong>Did you know?</strong> ${animal.funFacts[0]}</p>
+
+            <button class="action-btn" id="dailyDetails" type="button">
+              Explore this animal
+            </button>
+          </section>
+        `;
+
+        document.getElementById("dailyDetails")
+          .addEventListener("click", () => showAnimal(animal.id));
+      }
+
+      function startQuiz() {
+        currentQuizIndex = 0;
+        quizScore = 0;
+        quizRound = [...quizQuestions];
+        for (let index = quizRound.length - 1; index > 0; index--) {
+          const swapIndex = Math.floor(Math.random() * (index + 1));
+          [quizRound[index], quizRound[swapIndex]] = [quizRound[swapIndex], quizRound[index]];
+        }
+        if (quizRound.length > 1 && quizRound[0] === lastQuizFirstQuestion) {
+          [quizRound[0], quizRound[1]] = [quizRound[1], quizRound[0]];
+        }
+        lastQuizFirstQuestion = quizRound[0];
+        quizQuestionAnswered = false;
+        renderQuizQuestion();
+      }
+
+      function quitQuiz() {
+        const answeredCount = currentQuizIndex + (quizQuestionAnswered ? 1 : 0);
+        featureContent.innerHTML = `
+          <h2 class="section-title">Quiz ended</h2>
+          <section class="game-panel">
+            <p>You quit the quiz.</p>
+            <p>Your score so far: <strong>${quizScore} out of ${answeredCount}</strong></p>
+            <button class="action-btn" id="restartQuiz" type="button">Start over</button>
+            <button class="back-btn" id="quizHome" type="button">Return to menu</button>
+          </section>
+        `;
+        document.getElementById("restartQuiz").addEventListener("click", startQuiz);
+        document.getElementById("quizHome").addEventListener("click", () => showPage(homePage));
+      }
+
+      function renderQuizQuestion() {
+        if (currentQuizIndex >= quizRound.length) {
+          completedQuiz = true;
+          if (quizScore === quizRound.length) perfectQuizCount++;
+          saveProgress();
+          featureContent.innerHTML = `
+            <h2 class="section-title">Quiz complete!</h2>
+            <section class="game-panel">
+              <p>You scored <strong>${quizScore} out of ${quizRound.length}</strong>.</p>
+              <button class="action-btn" id="restartQuiz" type="button">Play again</button>
+            </section>
+          `;
+          document.getElementById("restartQuiz").addEventListener("click", startQuiz);
+          return;
+        }
+
+        quizQuestionAnswered = false;
+        const current = quizRound[currentQuizIndex];
+        featureContent.innerHTML = `
+          <h2 class="section-title">Quiz challenge</h2>
+          <p class="section-copy">Question ${currentQuizIndex + 1} of ${quizRound.length} · Score: ${quizScore}</p>
+          <section class="game-panel">
+            <h3>${current.question}</h3>
+            <div class="choice-grid">
+              ${current.options.map((option) => `<button class="answer-btn" type="button" data-answer="${option}">${option}</button>`).join("")}
+            </div>
+            <p id="quizFeedback" class="game-feedback" aria-live="polite"></p>
+            <button class="back-btn" id="quitQuiz" type="button">Quit</button>
+          </section>
+        `;
+
+        document.getElementById("quitQuiz").addEventListener("click", quitQuiz);
+        featureContent.querySelectorAll(".answer-btn").forEach((button) => {
+          button.addEventListener("click", () => {
+            const correct = button.dataset.answer === current.answer;
+            if (correct) quizScore++;
+            quizQuestionAnswered = true;
+
+            featureContent.querySelectorAll("[data-answer]").forEach((answerButton) => {
+              answerButton.disabled = true;
+            });
+
+            document.getElementById("quizFeedback").textContent = correct
+              ? "Correct! Great wildlife knowledge."
+              : `Not quite. The answer is ${current.answer}.`;
+
+            const next = document.createElement("button");
+            next.className = "action-btn";
+            next.type = "button";
+            next.textContent = currentQuizIndex + 1 === quizRound.length ? "See score" : "Next question";
+            next.addEventListener("click", () => {
+              currentQuizIndex++;
+              renderQuizQuestion();
+            });
+
+            featureContent.querySelector(".game-panel").appendChild(next);
+          });
+        });
+      }
+      function renderConservation() {
+        const threatenedAnimals = animals
+          .filter((animal) => typeof animal.conservation === "string"
+            && ["critically endangered", "endangered", "vulnerable"].includes(animal.conservation.toLowerCase()))
+          .sort((first, second) => {
+            const rank = { "critically endangered": 0, endangered: 1, vulnerable: 2 };
+            return rank[first.conservation.toLowerCase()] - rank[second.conservation.toLowerCase()]
+              || first.name.localeCompare(second.name);
+          });
+
+        featureContent.innerHTML = `
+          <div class="conservation-page">
+            <h2 class="section-title">Conservation</h2>
+            <p class="section-copy">Meet animals that need our help. Choose one to learn more.</p>
+            <div class="conservation-list">
+              ${threatenedAnimals.length ? threatenedAnimals.map((animal) => {
+                const status = animal.conservation.toLowerCase();
+                const statusClass = status === "critically endangered"
+                  ? "is-critical"
+                  : status === "endangered" ? "is-endangered" : "";
+                return `
+                  <div class="conservation-animal" data-animal-id="${animal.id}" role="button" tabindex="0">
+                    <span class="conservation-animal-icon" aria-hidden="true">${animal.icon}</span>
+                    <span>
+                      <span class="conservation-animal-name">${animal.name}</span>
+                      <span class="conservation-status ${statusClass}">${animal.conservation}</span>
+                    </span>
+                    <span class="conservation-arrow" aria-hidden="true">›</span>
+                  </div>
+                `;
+              }).join("") : `<p class="empty-message">No threatened animals are listed right now.</p>`}
+            </div>
+          </div>
+        `;
+
+        bindAnimalCards(featureContent);
+      }
+
+function renderDetective() {
+  detectiveGameEnded = false;
+
+  if (detectiveDeck.length === 0) {
+    detectiveDeck = [...detectiveLevels];
+    for (let index = detectiveDeck.length - 1; index > 0; index--) {
+      const swapIndex = Math.floor(Math.random() * (index + 1));
+      [detectiveDeck[index], detectiveDeck[swapIndex]] = [detectiveDeck[swapIndex], detectiveDeck[index]];
+    }
+    if (detectiveDeck.length > 1 && detectiveDeck[0] === lastDetectiveLevel) {
+      [detectiveDeck[0], detectiveDeck[1]] = [detectiveDeck[1], detectiveDeck[0]];
+    }
+  }
+
+  const level = detectiveDeck.shift();
+  if (!level) return;
+
+  lastDetectiveLevel = level;
+  const mystery = animals.find((animal) => animal.id === level.mysteryId);
+
+  featureContent.innerHTML = `
+    <h2 class="section-title">Animal detective</h2>
+    <p class="section-copy">Read the clues and pick the animal you think is hiding in the mystery habitat. If you choose incorrectly, the game will end!</p>
+
+    <section class="game-panel">
+      <h3>Who am I?</h3>
+
+      <ul>
+        ${level.clues.map((clue) => `<li>${clue}</li>`).join("")}
+      </ul>
+
+      <div class="choice-grid">
+        ${level.choices.map((id) => {
+          const animal = animals.find((entry) => entry.id === id);
+          return `<button class="answer-btn" type="button" data-mystery="${animal.id}">${animal.icon} ${animal.name}</button>`;
+        }).join("")}
+      </div>
+
+      <p id="detectiveFeedback" class="game-feedback" aria-live="polite"></p>
+      <button class="action-btn" id="nextMystery" type="button">Next mystery</button>
+    </section>
+  `;
+
+  const nextMysteryButton = document.getElementById("nextMystery");
+
+  nextMysteryButton.addEventListener("click", () => {
+    if (detectiveGameEnded) {
+      detectiveDeck = [];
+      detectiveGameEnded = false;
+      renderDetective();
+      return;
+    }
+    renderDetective();
+  });
+
+  featureContent.querySelectorAll("[data-mystery]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (detectiveGameEnded) return;
+
+      const correct = Number(button.dataset.mystery) === mystery.id;
+      const feedback = document.getElementById("detectiveFeedback");
+
+      if (correct) {
+        feedback.textContent = level.success;
+        solvedMysteryCount++;
+        saveProgress();
+        featureContent.querySelectorAll("[data-mystery]").forEach((answerButton) => {
+          answerButton.disabled = true;
+        });
+        return;
+      }
+
+      detectiveGameEnded = true;
+      feedback.textContent = "That was the wrong animal. The case is over!";
+      featureContent.querySelectorAll("[data-mystery]").forEach((answerButton) => {
+        answerButton.disabled = true;
+      });
+      nextMysteryButton.textContent = "Play again";
+      nextMysteryButton.classList.add("is-replay");
+    });
+  });
+}
+
+      function renderFavorites() {
+        const saved = animals.filter((animal) => favoriteIds.has(animal.id));
+        featureContent.innerHTML = `
+          <h2 class="section-title">My favorites</h2>
+          <div class="favorite-grid">
+            ${saved.length ? saved.map((animal) => `
+              <article class="favorite-card">
+                <div class="animal-image">${animal.icon}</div>
+                <h3>${animal.name}</h3>
+                <button class="icon-btn" type="button" data-remove-favorite="${animal.id}" aria-label="Remove ${animal.name} from favorites">♥</button>
+              </article>
+            `).join("") : `<div class="empty-message">No favorites yet. Browse animals and tap “Add to favorites” on an animal's page.</div>`}
+          </div>
+        `;
+        featureContent.querySelectorAll("[data-remove-favorite]").forEach((button) => {
+          button.addEventListener("click", () => {
+            favoriteIds.delete(Number(button.dataset.removeFavorite));
+            saveFavorites();
+            renderFavorites();
+          });
+        });
+      }
+
+      function renderRecentlyViewed() {
+        const recentlyViewed = recentAnimalIds
+          .map((id) => animals.find((animal) => animal.id === id))
+          .filter(Boolean);
+        featureContent.innerHTML = `
+          <h2 class="section-title">Recently Viewed</h2>
+          <p class="section-copy">Your latest animal discoveries appear here.</p>
+          <div class="animal-grid">
+            ${recentlyViewed.length
+              ? recentlyViewed.map(animalCardMarkup).join("")
+              : `<div class="empty-message">No animals viewed yet. Explore an animal to start your list.</div>`}
+          </div>
+        `;
+        bindAnimalCards(featureContent);
+      }
+
+      function renderAchievements() {
+        const unlockedCount = achievements.filter((achievement) => achievement.isUnlocked()).length;
+        featureContent.innerHTML = `
+          <h2 class="section-title">Achievements</h2>
+          <p class="section-copy">${unlockedCount} of ${achievements.length} unlocked. Keep exploring to earn more!</p>
+          <div class="achievement-grid">
+            ${achievements.map((achievement) => {
+              const unlocked = achievement.isUnlocked();
+              return `
+                <article class="achievement-card${unlocked ? "" : " is-locked"}">
+                  <span class="achievement-icon" aria-hidden="true">${achievement.icon}</span>
+                  <h3>${achievement.title}</h3>
+                  <p>${achievement.description}</p>
+                  <p><strong>${unlocked ? "Unlocked" : "Locked"}</strong></p>
+                </article>
+              `;
+            }).join("")}
+          </div>
+        `;
+      }
+
+      function renderAnimals() {
+        const filteredAnimals = getFilteredAnimals();
+
+        animalList.innerHTML = "";
+        resultsTitle.textContent = `${filteredAnimals.length} animal${filteredAnimals.length === 1 ? "" : "s"} found`;
+
+        if (filteredAnimals.length === 0) {
+          animalList.innerHTML = `
+            <div class="empty">
+              <div class="empty-icon">🔎</div>
+              <h3>No animals found</h3>
+              <p>Try another animal name, habitat or category.</p>
+            </div>
+          `;
+          return;
+        }
+
+        animalList.innerHTML = filteredAnimals.map(animalCardMarkup).join("");
+        bindAnimalCards(animalList);
+      }
+
+      backBtn.addEventListener("click", () => {
+        showPage(listPage);
+      });
+
+      document.getElementById("getStartedBtn").addEventListener("click", () => {
+        showPage(homePage);
+      });
+
+      document.querySelectorAll(".home-btn").forEach((button) => {
+        button.addEventListener("click", () => showPage(homePage));
+      });
+      document.querySelectorAll("[data-feature-group]").forEach((button) => {
+        button.addEventListener("click", () => renderFeatureSelection(button.dataset.featureGroup));
+      });
+
+      document.querySelectorAll("[data-feature]").forEach((button) => {
+        button.addEventListener("click", () => openFeature(button.dataset.feature));
+      });
+
+      searchInput.addEventListener("input", renderAnimals);
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          filterButtons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+          selectedCategory = button.dataset.category;
+          renderAnimals();
+        });
+      });
+
+      renderAnimals();
+    </script>
+  </body>
+</html>
