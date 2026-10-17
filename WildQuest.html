@@ -7,14 +7,14 @@
       <style>
 
         :root {
-          --bg: #f4f7ee;
-          --panel: #ffffff;
+          --bg: #e9f2e8;
+          --panel: #f7fbf5;
           --primary: #267b48;
           --primary-dark: #173f2c;
           --accent: #a9e85c;
           --text: #1f2937;
           --muted: #6b7280;
-          --border: #dfe9d7;
+          --border: #d1e5cc;
         }
 
         * { box-sizing: border-box; }
@@ -23,7 +23,8 @@
           margin: 0;
           min-height: 100%;
           font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-          background: var(--bg);
+          background: linear-gradient(135deg, #f5f8e9 0%, var(--bg) 52%, #dcefe9 100%);
+          background-attachment: fixed;
           color: var(--text);
         }
 
@@ -269,6 +270,7 @@
         .hero-copy {
           position: relative;
           z-index: 1;
+          min-width: 0;
         }
 
         .brand-lockup {
@@ -318,11 +320,12 @@
         }
 
         .hero-banner p {
-          max-width: 500px;
+          max-width: none;
           margin: 0;
           color: #e1eee6;
-          font-size: 1.02rem;
+          font-size: 1rem;
           line-height: 1.55;
+          white-space: nowrap;
         }
 
         .hero-actions {
@@ -399,8 +402,8 @@
         .search-wrap {
           display: flex;
           align-items: center;
-          background: rgba(255,255,255,0.45);
-          border: 1px solid rgba(31, 41, 55, 0.08);
+          background: #f4f8ef;
+          border: 1px solid var(--border);
           border-radius: 28px;
           min-height: 72px;
           padding: 12px 22px;
@@ -424,8 +427,8 @@
         }
 
         .filter {
-          border: 1px solid rgba(31, 41, 55, 0.08);
-          background: rgba(255,255,255,0.38);
+          border: 1px solid var(--border);
+          background: #edf6e8;
           color: var(--primary-dark);
           border-radius: 999px;
           padding: 12px 18px;
@@ -455,8 +458,8 @@
         }
 
         .animal-card {
-          background: rgba(255,255,255,0.4);
-          border: 1px solid rgba(31, 41, 55, 0.08);
+          background: #e8fac7;
+          border: 1px solid #c8e4a1;
           border-radius: 18px;
           min-height: 170px;
           display: flex;
@@ -476,13 +479,19 @@
           width: 72px;
           height: 72px;
           border-radius: 20px;
-          background: linear-gradient(135deg, #dff3c9, #bfe4a5);
-          border: 2px solid rgba(38, 123, 72, 0.18);
+          background: linear-gradient(135deg, #fff8df, #ffe7a8);
+          border: 2px solid #f0d98c;
           display: grid;
           place-items: center;
           font-size: 2.5rem;
           flex-shrink: 0;
-          box-shadow: inset 0 2px 8px rgba(255,255,255,0.35), 0 8px 18px rgba(38,123,72,0.12);
+          box-shadow: inset 0 2px 8px rgba(255,255,255,0.55), 0 8px 18px rgba(95, 76, 22, 0.12);
+        }
+
+        .animal-card .animal-image {
+          background: linear-gradient(135deg, #e4f4f8, #c8e7ef);
+          border-color: #a9d3de;
+          box-shadow: inset 0 2px 8px rgba(255,255,255,0.65), 0 8px 18px rgba(40, 100, 115, 0.12);
         }
 
         .animal-info {
@@ -519,8 +528,8 @@
         }
 
         .empty {
-          background: rgba(255,255,255,0.3);
-          border: 1px dashed rgba(31, 41, 55, 0.12);
+          background: #f4f8ef;
+          border: 1px dashed var(--border);
           border-radius: 18px;
           padding: 40px 20px;
           text-align: center;
@@ -542,12 +551,13 @@
         }
 
         .detail-panel {
-          background: rgba(255,255,255,0.4);
-          border: 1px solid rgba(31, 41, 55, 0.08);
+          background: #edf6e8;
+          border: 1px solid #d1e5cc;
           border-radius: 28px;
           padding: 28px;
           max-width: 820px;
           margin: 0 auto;
+          box-shadow: 0 16px 38px rgba(31, 76, 49, 0.1);
         }
 
         .detail-top {
@@ -590,14 +600,26 @@
 
         .tag {
           display: inline-block;
-          background: #dfeec3;
+          background: #dcefff;
           color: var(--primary-dark);
           border-radius: 999px;
           padding: 8px 14px;
           font-weight: 700;
         }
 
+        .tag:nth-child(2) {
+          background: #d5f4f4;
+        }
+
+        .tag:nth-child(3) {
+          background: #fff0bc;
+        }
+
         .detail-body {
+          padding: 18px 20px;
+          border: 1px solid #d4ebe1;
+          border-radius: 18px;
+          background: #f1faf6;
           color: var(--text);
           font-size: 1.02rem;
         }
@@ -611,9 +633,19 @@
 
         .detail-fact {
           padding: 12px 14px;
-          border: 1px solid rgba(38, 123, 72, 0.1);
+          border: 1px solid #c8e4d5;
           border-radius: 14px;
-          background: rgba(255,255,255,0.62);
+          background: #e0f4e5;
+        }
+
+        .detail-fact:nth-child(2) {
+          border-color: #b8d9f0;
+          background: #eaf5ff;
+        }
+
+        .detail-fact:nth-child(3) {
+          border-color: #f0c49e;
+          background: #ffeada;
         }
 
         .detail-fact strong {
@@ -664,9 +696,9 @@
           justify-content: center;
           gap: 10px;
           padding: 22px;
-          border: 1px solid rgba(31, 41, 55, 0.1);
+          border: 1px solid var(--border);
           border-radius: 24px;
-          background: #fff;
+          background: #edf6e8;
           color: var(--primary-dark);
           font: inherit;
           font-size: clamp(1.15rem, 2vw, 1.65rem);
@@ -701,10 +733,22 @@
           line-height: 1;
         }
 
-        .primary-feature-card[data-feature-group="explore"] { background: linear-gradient(135deg, #e9f8d6, #d4efb8); }
-        .primary-feature-card[data-feature-group="play"] { background: linear-gradient(135deg, #f1e5ff, #dfccff); }
-        .primary-feature-card[data-feature-group="protect"] { background: linear-gradient(135deg, #dcf5ed, #bdebdc); }
-        .primary-feature-card[data-feature-group="favorites"] { background: linear-gradient(135deg, #ffe7f1, #f7cfe2); }
+        .primary-feature-card[data-feature-group="explore"] {
+          border-color: #b7dd83;
+          background: linear-gradient(135deg, #e8fac7, #b9e77a);
+        }
+        .primary-feature-card[data-feature-group="play"] {
+          border-color: #b8d9f0;
+          background: linear-gradient(135deg, #dcefff, #b8d9f0);
+        }
+        .primary-feature-card[data-feature-group="protect"] {
+          border-color: #9edcc7;
+          background: linear-gradient(135deg, #c9f4df, #91e4d1);
+        }
+        .primary-feature-card[data-feature-group="favorites"] {
+          border-color: #e5a9bb;
+          background: linear-gradient(135deg, #ffd5e1, #f5a9c1);
+        }
 
         .feature-grid {
           display: grid;
@@ -718,9 +762,9 @@
         .feature-card {
           min-height: 180px;
           padding: 20px;
-          border: 1px solid rgba(255,255,255,0.55);
+          border: 1px solid var(--border);
           border-radius: 22px;
-          background: #fff;
+          background: #edf6e8;
           color: #26332b;
           text-align: left;
           cursor: pointer;
@@ -762,13 +806,46 @@
           line-height: 1.4;
         }
 
-        .feature-card[data-feature="find"] { background: #e4f4d0; }
-        .feature-card[data-feature="habitats"] { background: #d9f1eb; }
-        .feature-card[data-feature="daily"] { background: #fff0c8; }
-        .feature-card[data-feature="quiz"] { background: #eee0ff; }
-        .feature-card[data-feature="detective"] { background: #dff3e1; }
-        .feature-card[data-feature="conservation"] { background: #e4f3dd; }
-        .feature-card[data-feature="favorites"] { background: #f9dff0; }
+        .feature-card[data-feature="find"] {
+          border-color: #b7d986;
+          background: linear-gradient(135deg, #e4f7b2, #c8ed78);
+        }
+        .feature-card[data-feature="habitats"] {
+          border-color: #9dd9bd;
+          background: linear-gradient(135deg, #c3f2dc, #8de0bf);
+        }
+        .feature-card[data-feature="daily"] {
+          border-color: #e8ce7d;
+          background: linear-gradient(135deg, #ffefad, #ffd36e);
+        }
+        .feature-card[data-feature="quiz"] {
+          border-color: #b8d9f0;
+          background: linear-gradient(135deg, #dcefff, #b8d9f0);
+        }
+        .feature-card[data-feature="detective"] {
+          border-color: #e6b37f;
+          background: linear-gradient(135deg, #ffe0bd, #ffc58f);
+        }
+        .feature-card[data-feature="conservation"] {
+          border-color: #98d5bd;
+          background: linear-gradient(135deg, #c1efdf, #8edcc4);
+        }
+        .feature-card[data-feature="conservation-help"] {
+          border-color: #b7d986;
+          background: linear-gradient(135deg, #e4f7b2, #b8e77e);
+        }
+        .feature-card[data-feature="favorites"] {
+          border-color: #e5a9bb;
+          background: linear-gradient(135deg, #ffd5e1, #f5a9c1);
+        }
+        .feature-card[data-feature="recent"] {
+          border-color: #a6d5e5;
+          background: linear-gradient(135deg, #d2f0fa, #a7dfee);
+        }
+        .feature-card[data-feature="achievements"] {
+          border-color: #b8d9f0;
+          background: linear-gradient(135deg, #dcefff, #b8d9f0);
+        }
 
         .section-title {
           margin: 0 0 10px;
@@ -790,9 +867,89 @@
 
         .habitat-card, .choice-card, .favorite-card, .game-panel {
           padding: 20px;
-          border: 1px solid rgba(31, 41, 55, 0.08);
+          border: 1px solid var(--border);
           border-radius: 18px;
-          background: rgba(255, 255, 255, 0.45);
+          background: #edf6e8;
+        }
+
+        .game-panel {
+          border-color: #f0c49e;
+          background: #fff1e3;
+        }
+
+        .choice-card:nth-child(5n + 1) {
+          background: #e8fac7;
+          border-color: #c8e4a1;
+        }
+
+        .choice-card:nth-child(5n + 2) {
+          background: #dcefff;
+          border-color: #b8d9f0;
+        }
+
+        .choice-card:nth-child(5n + 3) {
+          background: #c9f4df;
+          border-color: #b2e3cf;
+        }
+
+        .choice-card:nth-child(5n + 4) {
+          background: #fff0bc;
+          border-color: #eadcaa;
+        }
+
+        .choice-card:nth-child(5n) {
+          background: #ffe1c7;
+          border-color: #f0c49e;
+        }
+
+        .habitat-card[data-habitat="0"], .habitat-card[data-habitat="6"] {
+          background: #d8efff;
+          border-color: #b8d9f0;
+        }
+
+        .habitat-card[data-habitat="1"] {
+          background: #e0f2d6;
+          border-color: #c5dfb7;
+        }
+
+        .habitat-card[data-habitat="2"] {
+          background: #f4e4d2;
+          border-color: #e4cbb0;
+        }
+
+        .habitat-card[data-habitat="3"] {
+          background: #e6f5ff;
+          border-color: #c6e2f3;
+        }
+
+        .habitat-card[data-habitat="4"] {
+          background: #fff0bc;
+          border-color: #eadcaa;
+        }
+
+        .habitat-card[data-habitat="5"] {
+          background: #ffe7cf;
+          border-color: #f0c49e;
+        }
+
+        .habitat-card[data-help-tip]:nth-child(4n + 1) {
+          background: #e8fac7;
+          border-color: #c8e4a1;
+        }
+
+        .habitat-card[data-help-tip]:nth-child(4n + 2) {
+          background: #d8efff;
+          border-color: #b8d9f0;
+        }
+
+        .habitat-card[data-help-tip]:nth-child(4n + 3) {
+          background: #c9f4df;
+          border-color: #b2e3cf;
+        }
+
+        .habitat-card[data-help-tip]:nth-child(4n) {
+          background: #ffe1c7;
+          border-color: #f0c49e;
         }
 
         .habitat-card, .choice-card, .favorite-card {
@@ -849,10 +1006,25 @@
         .answer-btn {
           width: 100%;
           margin: 5px 0;
-          background: rgba(255,255,255,0.72);
+          background: #f7fbf5;
           border: 1px solid var(--border);
           color: var(--primary-dark);
           text-align: left;
+        }
+
+        .answer-btn:nth-of-type(3n + 1) {
+          background: #e8fac7;
+          border-color: #c8e4a1;
+        }
+
+        .answer-btn:nth-of-type(3n + 2) {
+          background: #dcefff;
+          border-color: #b8d9f0;
+        }
+
+        .answer-btn:nth-of-type(3n) {
+          background: #c9f4df;
+          border-color: #b2e3cf;
         }
 
         .answer-btn:hover, .action-btn:hover {
@@ -895,7 +1067,7 @@
           padding: 20px;
           border: 1px solid var(--border);
           border-radius: 18px;
-          background: #fff;
+          background: #edf6e8;
         }
 
         .conservation-help-card h3 {
@@ -925,9 +1097,9 @@
           align-items: center;
           gap: 12px;
           padding: 10px 12px;
-          border: 1px solid var(--border);
+          border: 1px solid #c8e4a1;
           border-radius: 16px;
-          background: #fff;
+          background: #e8fac7;
           color: var(--text);
           cursor: pointer;
         }
@@ -978,6 +1150,8 @@
           display: flex;
           align-items: center;
           gap: 14px;
+          background: #ffe0e8;
+          border-color: #efb6c5;
         }
 
         .favorite-card .animal-image {
@@ -999,9 +1173,9 @@
         }
 
         .favorite-toggle {
-          border: 1px solid var(--border);
+          border: 1px solid #efc3cc;
           border-radius: 999px;
-          background: rgba(255,255,255,0.7);
+          background: #ffe8ed;
           color: var(--primary-dark);
           padding: 8px 12px;
           font-weight: 700;
@@ -1019,7 +1193,7 @@
           grid-column: 1 / -1;
           padding: 28px;
           border-radius: 18px;
-          background: rgba(255,255,255,0.4);
+          background: #f4f8ef;
           color: #59685f;
         }
 
@@ -1031,15 +1205,35 @@
 
         .achievement-card {
           padding: 18px;
-          border: 1px solid rgba(38, 123, 72, 0.12);
+          border: 1px solid #c8e4a1;
           border-radius: 18px;
-          background: linear-gradient(135deg, #f0f8e8, #e3f1d9);
+          background: linear-gradient(135deg, #e8fac7, #d6f2e8);
           color: var(--primary-dark);
         }
 
         .achievement-card.is-locked {
-          background: rgba(255,255,255,0.42);
+          background: #edf6e8;
           color: #69756d;
+        }
+
+        .achievement-card.is-locked:nth-child(4n + 1) {
+          border-color: #b8d9f0;
+          background: #eaf5ff;
+        }
+
+        .achievement-card.is-locked:nth-child(4n + 2) {
+          border-color: #f0c49e;
+          background: #fff1e3;
+        }
+
+        .achievement-card.is-locked:nth-child(4n + 3) {
+          border-color: #a6d5e5;
+          background: #e7f6fa;
+        }
+
+        .achievement-card.is-locked:nth-child(4n) {
+          border-color: #eadcaa;
+          background: #fff6d9;
         }
 
         .achievement-icon {
@@ -1055,6 +1249,12 @@
         .achievement-card p {
           margin: 0;
           line-height: 1.5;
+        }
+
+        @media (max-width: 1023px) {
+          .hero-banner p {
+            font-size: clamp(0.55rem, 1.3vw, 0.9rem);
+          }
         }
 
         @media (max-width: 900px) {
@@ -1094,11 +1294,19 @@
           .hero-copy {
             max-width: 540px;
           }
+
+          .hero-banner p {
+            font-size: clamp(0.45rem, 2.2vw, 0.9rem);
+          }
         }
 
         @media (max-width: 460px) {
           .page {
             padding: 18px 14px 32px;
+          }
+
+          .hero-banner {
+            padding: 18px;
           }
 
           .feature-grid {
@@ -1186,7 +1394,7 @@
               </div>
             </div>
             <h2>Explore the incredible world of wildlife!</h2>
-            <p>Learn amazing facts, test your knowledge, and discover how every animal has a story.</p>
+            <p>Learn Amazing Facts, Test Your Knowledge, Discover Every Animal's Story.</p>
             <div class="hero-actions" aria-label="WildQuest goals">
             </div>
           </div>
